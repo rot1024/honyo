@@ -3,6 +3,7 @@ import { uIOhook, UiohookKey } from 'uiohook-napi';
 import { translateText } from '../translation/index.ts';
 import { getConfig, getPausedState } from '../config/index.ts';
 import { setTrayIcon } from '../ui/tray.ts';
+import { showTranslationPopup } from '../ui/popup.ts';
 
 let isTranslating = false;
 let t = 0;
@@ -51,17 +52,30 @@ export function setupKeyboardHandler(): void {
             setTrayIcon(true);
 
             const config = getConfig();
+
+            // Show popup immediately with loading state if in popup mode
+            if (config.displayMode === 'popup') {
+              showTranslationPopup(null, text);
+            }
+
             const translation = await translateText(
               text,
               config.targetLanguage,
               config.secondaryLanguage,
             );
-            clipboard.writeText(translation); // Copy translation result to clipboard
 
-            new Notification({
-              title: 'Translation Result',
-              body: translation.length > 100 ? translation.slice(0, 100) + '...' : translation,
-            }).show();
+            // Handle display mode
+            if (config.displayMode === 'popup') {
+              // Update popup window with translation
+              showTranslationPopup(translation, text);
+            } else {
+              // Notification mode: copy to clipboard and show notification
+              clipboard.writeText(translation);
+              new Notification({
+                title: 'Translation Result',
+                body: translation.length > 100 ? translation.slice(0, 100) + '...' : translation,
+              }).show();
+            }
           } catch (error) {
             console.error('Error in translation process:', error);
             new Notification({

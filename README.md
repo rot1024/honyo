@@ -14,6 +14,9 @@ A desktop application that provides instant AI-powered translation with a simple
 - **Primary/Secondary Language System**: Set primary and secondary languages for smart translation switching
 - **System Tray Integration**: Runs quietly in the background with easy access from the system tray
 - **Translation Status Indicator**: Visual feedback showing when translation is in progress
+- **Two Display Modes**:
+  - **Notification & Copy**: Shows notification and automatically copies translation to clipboard
+  - **Popup Window**: Shows translation in a draggable popup window near your cursor with manual copy option
 - **Pause/Resume**: Temporarily disable translation when needed
 - **Single Instance**: Prevents multiple instances from running simultaneously
 - **Custom Instructions**: Add your own translation guidelines and terminology

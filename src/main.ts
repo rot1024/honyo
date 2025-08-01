@@ -3,6 +3,7 @@ import { initializeConfig } from './config/index.ts';
 import { createTray, setupSettingsIPC } from './ui/index.ts';
 import { setupKeyboardHandler, startKeyboardListener } from './keyboard/index.ts';
 import { setupSingleInstance, setupPlatformSpecific, setupShutdownHandlers } from './app/index.ts';
+import { setupPopupIPC } from './ui/popup.ts';
 
 // Initialize the app
 function initialize(): void {
@@ -31,6 +32,9 @@ function initialize(): void {
 
     // Setup IPC for settings window
     setupSettingsIPC();
+
+    // Setup IPC for popup window
+    setupPopupIPC();
 
     // Setup keyboard handler
     setupKeyboardHandler();

@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Translation</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      }
+      body {
+        background: transparent;
+        user-select: none;
+      }
+
+      /* Light mode (default) */
+      :root {
+        --bg-primary: white;
+        --bg-secondary: #f7f7f7;
+        --border-color: #e0e0e0;
+        --text-primary: #333;
+        --text-secondary: #666;
+        --btn-primary: #007aff;
+        --btn-primary-hover: #0056b3;
+        --btn-primary-active: #004494;
+        --close-btn: #ff5f57;
+        --scrollbar-thumb: #ddd;
+        --scrollbar-thumb-hover: #bbb;
+        --shadow: rgba(0, 0, 0, 0.15);
+      }
+
+      /* Dark mode */
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg-primary: #1e1e1e;
+          --bg-secondary: #2a2a2a;
+          --border-color: #3a3a3a;
+          --text-primary: #f0f0f0;
+          --text-secondary: #b0b0b0;
+          --btn-primary: #0a84ff;
+          --btn-primary-hover: #0066cc;
+          --btn-primary-active: #0051a3;
+          --close-btn: #ff5f57;
+          --scrollbar-thumb: #4a4a4a;
+          --scrollbar-thumb-hover: #5a5a5a;
+          --shadow: rgba(0, 0, 0, 0.4);
+        }
+      }
+      .popup-container {
+        background: var(--bg-primary);
+        border-radius: 8px;
+        box-shadow: 0 4px 24px var(--shadow);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        position: relative;
+      }
+      .header {
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        padding: 8px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        -webkit-app-region: drag;
+      }
+      .header-title {
+        font-size: 12px;
+        color: var(--text-secondary);
+        font-weight: 500;
+      }
+      .header-buttons {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        -webkit-app-region: no-drag;
+      }
+      .header-btn {
+        padding: 4px 12px;
+        font-size: 11px;
+        border-radius: 3px;
+        cursor: pointer;
+      }
+      .close-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        -webkit-app-region: no-drag;
+        font-size: 16px;
+        line-height: 1;
+        color: var(--text-secondary);
+        padding: 4px 8px;
+        margin: -4px -4px -4px 0;
+        transition: color 0.2s;
+      }
+      .close-btn:hover {
+        color: var(--text-primary);
+      }
+      .content {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+        user-select: text;
+      }
+      .translation-text {
+        font-size: 14px;
+        line-height: 1.6;
+        color: var(--text-primary);
+        word-wrap: break-word;
+        white-space: pre-wrap;
+      }
+      .copy-btn {
+        background: var(--btn-primary);
+        color: white;
+        border: none;
+        padding: 6px 16px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .copy-btn:hover {
+        background: var(--btn-primary-hover);
+      }
+      .copy-btn:active {
+        background: var(--btn-primary-active);
+      }
+      .copy-btn:disabled {
+        background: var(--border-color);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+      /* Custom scrollbar */
+      .content::-webkit-scrollbar {
+        width: 6px;
+      }
+      .content::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .content::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-thumb);
+        border-radius: 3px;
+      }
+      .content::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-thumb-hover);
+      }
+
+      /* Loading spinner */
+      .spinner-container {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      .spinner-container.active {
+        display: flex;
+      }
+      .spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--border-color);
+        border-top-color: var(--btn-primary);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="popup-container">
+      <div class="header">
+        <span class="header-title">Honyo Translator</span>
+        <div class="header-buttons">
+          <button class="copy-btn header-btn" onclick="copyTranslation()">Copy</button>
+          <button class="close-btn" onclick="closePopup()">×</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="spinner-container" id="spinner-container">
+          <div class="spinner"></div>
+        </div>
+        <div class="translation-text" id="translation-text" style="display: none"></div>
+      </div>
+    </div>
+
+    <script>
+      const { ipcRenderer } = require('electron');
+      let currentTranslation = '';
+
+      // Show loading state
+      ipcRenderer.on('translation-loading', () => {
+        document.getElementById('spinner-container').classList.add('active');
+        document.getElementById('translation-text').style.display = 'none';
+        document.querySelector('.copy-btn').disabled = true;
+      });
+
+      // Receive translation data
+      ipcRenderer.on('translation-data', (event, data) => {
+        currentTranslation = data.translation;
+        document.getElementById('spinner-container').classList.remove('active');
+        document.getElementById('translation-text').style.display = 'block';
+        document.getElementById('translation-text').textContent = currentTranslation;
+        document.querySelector('.copy-btn').disabled = false;
+      });
+
+      function copyTranslation() {
+        if (currentTranslation) {
+          ipcRenderer.send('copy-translation', currentTranslation);
+        }
+      }
+
+      function closePopup() {
+        ipcRenderer.send('close-popup');
+      }
+
+      // Close popup on Escape key
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') {
+          closePopup();
+        }
+      });
+    </script>
+  </body>
+</html>

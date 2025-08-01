@@ -43,6 +43,7 @@ function getDefaultConfig(): Config {
     isPaused: false,
     aiModel: DEFAULT_AI_MODEL,
     customPrompt: '',
+    displayMode: 'notification',
   };
 }
 
@@ -66,6 +67,11 @@ export function initializeConfig(): void {
   // Initialize custom prompt if not present
   if (config.customPrompt === undefined) {
     config.customPrompt = '';
+  }
+
+  // Initialize display mode if not present
+  if (config.displayMode === undefined) {
+    config.displayMode = 'notification';
   }
 
   // Restore isPaused state
@@ -109,4 +115,4 @@ export function setPausedState(paused: boolean): void {
   saveConfig();
 }
 
-export type { ApiKeys, Config } from './types';
+export type { ApiKeys, Config, DisplayMode } from './types';

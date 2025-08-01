@@ -1,17 +1,37 @@
 import type { Tray } from 'electron';
 import { Menu, app } from 'electron';
 import { uIOhook } from 'uiohook-napi';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { languages } from '../language/index.ts';
 import { AI_MODELS } from '../models.ts';
 import { getConfig, updateConfig, getPausedState, setPausedState } from '../config/index.ts';
 import { openSettingsWindow } from './settings.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Get version from package.json
+let appVersion = '';
+try {
+  const packageContent = readFileSync(join(__dirname, '../../package.json'), 'utf-8');
+  const packageJson = JSON.parse(packageContent) as { version?: string };
+  appVersion = packageJson.version ?? '';
+} catch (error) {
+  console.error('Failed to read package.json version:', error);
+}
 
 export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: string) => void): Menu {
   const config = getConfig();
   const isPaused = getPausedState();
 
   const contextMenu = Menu.buildFromTemplate([
-    { label: 'Honyo Translator', type: 'normal', enabled: false },
+    {
+      label: `Honyo Translator ${appVersion ? `v${appVersion}` : ''}`,
+      type: 'normal',
+      enabled: false,
+    },
     { type: 'separator' },
     {
       label: `Primary: ${config.targetLanguage}`,
@@ -54,6 +74,29 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       })),
     },
     { type: 'separator' },
+    {
+      label: 'Display Mode',
+      submenu: [
+        {
+          label: 'Notification & Copy',
+          type: 'radio',
+          checked: config.displayMode === 'notification',
+          click: (): void => {
+            updateConfig({ displayMode: 'notification' });
+            tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+          },
+        },
+        {
+          label: 'Popup Window',
+          type: 'radio',
+          checked: config.displayMode === 'popup',
+          click: (): void => {
+            updateConfig({ displayMode: 'popup' });
+            tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+          },
+        },
+      ],
+    },
     {
       label: `AI Model: ${AI_MODELS[config.aiModel]?.name ?? 'Unknown'}`,
       submenu: Object.entries(AI_MODELS).map(([modelId, modelInfo]) => ({
