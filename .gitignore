@@ -6,3 +6,4 @@ dist/
 build/
 *.log
 .eslintcache
+RELEASE_NOTES.md

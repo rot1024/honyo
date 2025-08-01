@@ -19,7 +19,9 @@
     "dist": "npm run build && electron-builder",
     "dist:mac": "electron-builder --mac",
     "dist:win": "electron-builder --win",
-    "dist:linux": "electron-builder --linux"
+    "dist:linux": "electron-builder --linux",
+    "changelog": "conventional-changelog -p angular -o RELEASE_NOTES.md -r 1",
+    "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
   },
   "repository": "https://github.com/rot1024/honyo.git",
   "keywords": [],
@@ -37,6 +39,7 @@
     "@typescript-eslint/eslint-plugin": "^8.38.0",
     "@typescript-eslint/parser": "^8.38.0",
     "@vitest/ui": "^3.2.4",
+    "conventional-changelog-cli": "^5.0.0",
     "electron": "^37.2.5",
     "electron-builder": "^26.0.12",
     "esbuild": "^0.24.0",
