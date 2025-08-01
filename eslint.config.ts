@@ -1,16 +1,14 @@
 import eslint from '@eslint/js';
-import tseslint from '@typescript-eslint/eslint-plugin';
-import tsParser from '@typescript-eslint/parser';
-import prettier from 'eslint-plugin-prettier';
-import prettierConfig from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 import globals from 'globals';
+import importPlugin from 'eslint-plugin-import';
 
-export default [
+export default tseslint.config(
   eslint.configs.recommended,
+  ...tseslint.configs.recommendedTypeChecked,
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
-      parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
@@ -23,23 +21,25 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': tseslint,
-      prettier: prettier,
+      import: importPlugin,
     },
     rules: {
-      ...tseslint.configs['recommended'].rules,
-      ...tseslint.configs['recommended-requiring-type-checking'].rules,
-      ...prettierConfig.rules,
-      'prettier/prettier': 'error',
       '@typescript-eslint/explicit-function-return-type': 'error',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
       '@typescript-eslint/no-non-null-assertion': 'warn',
       'no-console': 'off',
+      'import/extensions': [
+        'error',
+        'always',
+        {
+          ignorePackages: true,
+        },
+      ],
     },
   },
   {
-    ignores: ['node_modules/**', 'dist/**', '*.js'],
+    ignores: ['node_modules/**', 'dist/**', '*.js', 'eslint.config.ts'],
   },
-];
+);
