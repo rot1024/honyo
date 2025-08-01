@@ -1,27 +1,22 @@
-# Honyo - AI-Powered Translation Tool
+<div align="center">
+  <img src="assets/icon.svg" width="128" height="128" alt="Honyo Icon">
 
-A desktop application that provides instant AI-powered translation with a simple double Ctrl/Cmd+C shortcut, similar to DeepL. (status: alpha)
+  # Honyo - AI-Powered Translation Tool
 
-![Honyo screenshot](honyo.png)
+  A desktop application that provides instant AI-powered translation with a simple double Ctrl/Cmd+C shortcut, similar to DeepL.
+
+  ![Honyo screenshot](assets/screenshot.png)
+</div>
+
 
 ## Features
 
-- **Quick Translation**: Double-tap Ctrl+C (Windows/Linux) or Cmd+C (macOS) to translate selected text
-- **Multi-Language Support**: Supports 15+ languages including Japanese, English, Chinese, Korean, Spanish, French, German, and more
-- **Multiple AI Models**: Choose from various AI providers:
-  - Anthropic (Claude 3.7 Sonnet, Claude 3.5 Sonnet, Claude 3.5 Haiku)
-  - OpenAI (GPT-4.1, GPT-4.1 Mini, GPT-4.1 Nano, GPT-4o, GPT-4o Mini, GPT-4, o1, o1 Mini, o1 Preview)
-  - Google (Gemini 2.0 Flash Experimental, Gemini 1.5 Flash, Gemini 1.5 Pro)
-- **Smart Language Detection**: Automatically detects source language and translates accordingly
-- **Primary/Secondary Language System**: Set primary and secondary languages for smart translation switching
-- **System Tray Integration**: Runs quietly in the background with easy access from the system tray
-- **Translation Status Indicator**: Visual feedback showing when translation is in progress
-- **Two Display Modes**:
-  - **Notification & Copy**: Shows notification and automatically copies translation to clipboard
-  - **Popup Window**: Shows translation in a draggable popup window near your cursor with manual copy option
-- **Pause/Resume**: Temporarily disable translation when needed
-- **Single Instance**: Prevents multiple instances from running simultaneously
-- **Custom Instructions**: Add your own translation guidelines and terminology
+- ⚡ **Instant Translation** - Double Ctrl+C to translate any selected text
+- 🌍 **15+ Languages** - Japanese, English, Chinese, Korean, Spanish, French, German, and more
+- 🤖 **Latest AI Models** - Claude 3.7, GPT-4.1, Gemini 2.0, and others
+- 🔄 **Smart Detection** - Auto-detects language and switches between primary/secondary targets
+- 💻 **Lightweight** - Lives in your system tray, notification or popup display modes
+- 📝 **Customizable** - Add your own translation rules and terminology
 
 ## Configuration
 

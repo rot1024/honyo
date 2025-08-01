@@ -15,21 +15,11 @@ export function createTray(): Tray {
   if (!normalIcon) throw new Error('Normal icon not created');
   tray = new Tray(normalIcon);
 
-  // Debug: Show title on macOS to confirm existence
-  if (process.platform === 'darwin') {
-    tray.setTitle(getPausedState() ? 'P' : 'H');
-  }
 
   console.log('Tray created successfully');
 
-  // Create menu with update function
-  const updateTrayTitle = (title: string): void => {
-    if (process.platform === 'darwin' && tray) {
-      tray.setTitle(title);
-    }
-  };
-
-  const menu = createTrayMenu(tray, updateTrayTitle);
+  // Create menu
+  const menu = createTrayMenu(tray, () => {});
   tray.setContextMenu(menu);
   tray.setToolTip('Honyo - Double Cmd+C to translate');
 
@@ -45,14 +35,8 @@ export function setTrayIcon(isTranslating: boolean): void {
 
   if (isTranslating && translatingIcon) {
     tray.setImage(translatingIcon);
-    if (process.platform === 'darwin') {
-      tray.setTitle('T');
-    }
   } else if (normalIcon) {
     tray.setImage(normalIcon);
-    if (process.platform === 'darwin') {
-      tray.setTitle(getPausedState() ? 'P' : 'H');
-    }
   }
 }
 

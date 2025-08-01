@@ -15,6 +15,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "build": "node scripts/build.js",
+    "build:icons": "node scripts/make-icons.mjs",
     "dist": "npm run build && electron-builder",
     "dist:mac": "electron-builder --mac",
     "dist:win": "electron-builder --win",
@@ -30,6 +31,7 @@
   "homepage": "https://github.com/rot1024/honyo#readme",
   "description": "Instant AI translation anywhere: select text and double-copy (C+C)",
   "devDependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^24.1.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",
@@ -42,6 +44,7 @@
     "eslint-plugin-import": "^2.32.0",
     "glob": "^11.0.0",
     "globals": "^16.3.0",
+    "icon-gen": "^5.0.0",
     "jiti": "^2.5.1",
     "prettier": "^3.6.2",
     "tsx": "^4.20.3",
@@ -84,8 +87,19 @@
     "asarUnpack": [
       "node_modules/uiohook-napi/**/*"
     ],
+    "extraResources": [
+      {
+        "from": "src/ui/icon-normal.png",
+        "to": "icons/icon-normal.png"
+      },
+      {
+        "from": "src/ui/icon-translating.png", 
+        "to": "icons/icon-translating.png"
+      }
+    ],
     "mac": {
       "category": "public.app-category.utilities",
+      "icon": "assets/icons/icon.icns",
       "target": [
         {
           "target": "dmg",
@@ -105,9 +119,11 @@
     },
     "npmRebuild": true,
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "assets/icons/icon.ico"
     },
     "linux": {
+      "icon": "assets/icons",
       "target": [
         {
           "target": "AppImage",

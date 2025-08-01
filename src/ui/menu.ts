@@ -123,7 +123,6 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       checked: isPaused,
       click: (): void => {
         setPausedState(!isPaused);
-        updateTrayTitle(getPausedState() ? 'P' : 'H');
         console.log(`Translation ${getPausedState() ? 'paused' : 'resumed'}`);
         tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
       },
