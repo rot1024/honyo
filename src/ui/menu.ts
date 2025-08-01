@@ -78,7 +78,7 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       label: 'Display Mode',
       submenu: [
         {
-          label: 'Notification & Copy',
+          label: 'Notification && Copy',
           type: 'radio',
           checked: config.displayMode === 'notification',
           click: (): void => {
