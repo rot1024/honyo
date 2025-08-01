@@ -87,7 +87,9 @@
         font-weight: 500;
       }
       input[type='password'],
-      textarea {
+      input[type='text'],
+      textarea,
+      select {
         width: 100%;
         padding: 8px 12px;
         border: 1px solid #ddd;
@@ -96,7 +98,9 @@
         box-sizing: border-box;
       }
       input[type='password']:focus,
-      textarea:focus {
+      input[type='text']:focus,
+      textarea:focus,
+      select:focus {
         outline: none;
         border-color: #007aff;
       }
@@ -168,6 +172,8 @@
       <div class="tab-group">
         <button class="tab active" onclick="switchTab('api-keys')">API Keys</button>
         <button class="tab" onclick="switchTab('custom-prompt')">Custom Prompt</button>
+        <button class="tab" onclick="switchTab('custom-model')">Custom Model</button>
+        <button class="tab" onclick="switchTab('custom-languages')">Custom Languages</button>
       </div>
       <button class="save-btn tab-save-btn" id="save-all-btn" onclick="saveAll()">Save</button>
     </div>
@@ -232,6 +238,60 @@ For example:
           <div class="status" id="prompt-status"></div>
         </div>
       </div>
+
+      <div id="custom-model" class="tab-panel">
+        <div class="container">
+          <h2>Custom Model</h2>
+
+          <div class="form-group">
+            <label for="custom-model-name">Model Name</label>
+            <input type="text" id="custom-model-name" placeholder="gpt-4-1106-preview, claude-3-opus-20240229, etc." />
+            <div class="help-text">
+              Enter the exact model ID/name from your provider
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="custom-model-provider">Provider</label>
+            <select id="custom-model-provider">
+              <option value="">Select a provider</option>
+              <option value="anthropic">Anthropic</option>
+              <option value="openai">OpenAI</option>
+              <option value="google">Google AI</option>
+            </select>
+            <div class="help-text">
+              Select which API provider to use for this model
+            </div>
+          </div>
+
+          <div class="status" id="custom-model-status"></div>
+        </div>
+      </div>
+
+      <div id="custom-languages" class="tab-panel">
+        <div class="container">
+          <h2>Custom Languages</h2>
+
+          <div class="form-group">
+            <label for="custom-languages-input">Custom Language Names</label>
+            <textarea
+              id="custom-languages-input"
+              placeholder="Enter one language per line...
+For example:
+Esperanto
+Sanskrit
+Klingon
+Ancient Greek"
+            ></textarea>
+            <div class="help-text">
+              Add custom languages that will appear in the language selection menus.
+              Enter one language name per line.
+            </div>
+          </div>
+
+          <div class="status" id="custom-languages-status"></div>
+        </div>
+      </div>
     </div>
 
     <script>
@@ -240,6 +300,8 @@ For example:
       let pendingChanges = {
         apiKeys: false,
         customPrompt: false,
+        customModel: false,
+        customLanguages: false,
       };
 
       // Tab switching
@@ -255,6 +317,8 @@ For example:
       window.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.send('load-api-keys');
         ipcRenderer.send('load-custom-prompt');
+        ipcRenderer.send('load-custom-model');
+        ipcRenderer.send('load-custom-languages');
 
         // Add change listeners
         document
@@ -269,6 +333,15 @@ For example:
         document
           .getElementById('custom-prompt-input')
           .addEventListener('input', () => (pendingChanges.customPrompt = true));
+        document
+          .getElementById('custom-model-name')
+          .addEventListener('input', () => (pendingChanges.customModel = true));
+        document
+          .getElementById('custom-model-provider')
+          .addEventListener('change', () => (pendingChanges.customModel = true));
+        document
+          .getElementById('custom-languages-input')
+          .addEventListener('input', () => (pendingChanges.customLanguages = true));
       });
 
       // API Keys functionality
@@ -316,6 +389,56 @@ For example:
         }
       });
 
+      // Custom Model functionality
+      ipcRenderer.on('custom-model-loaded', (event, customModel) => {
+        if (customModel) {
+          document.getElementById('custom-model-name').value = customModel.model || '';
+          document.getElementById('custom-model-provider').value = customModel.provider || '';
+        }
+      });
+
+      function saveCustomModel() {
+        const customModel = {
+          model: document.getElementById('custom-model-name').value.trim(),
+          provider: document.getElementById('custom-model-provider').value,
+        };
+        ipcRenderer.send('save-custom-model', customModel);
+      }
+
+      ipcRenderer.on('custom-model-saved', (event, success) => {
+        if (success) {
+          pendingChanges.customModel = false;
+          showStatus('Custom model saved successfully!', false);
+        } else {
+          showStatus('Failed to save custom model. Please try again.', true);
+        }
+      });
+
+      // Custom Languages functionality
+      ipcRenderer.on('custom-languages-loaded', (event, customLanguages) => {
+        if (customLanguages && customLanguages.length > 0) {
+          document.getElementById('custom-languages-input').value = customLanguages.join('\n');
+        }
+      });
+
+      function saveCustomLanguages() {
+        const input = document.getElementById('custom-languages-input').value.trim();
+        const customLanguages = input
+          .split('\n')
+          .map(lang => lang.trim())
+          .filter(lang => lang.length > 0);
+        ipcRenderer.send('save-custom-languages', customLanguages);
+      }
+
+      ipcRenderer.on('custom-languages-saved', (event, success) => {
+        if (success) {
+          pendingChanges.customLanguages = false;
+          showStatus('Custom languages saved successfully!', false);
+        } else {
+          showStatus('Failed to save custom languages. Please try again.', true);
+        }
+      });
+
       // Save all function
       function saveAll() {
         const saveBtn = document.getElementById('save-all-btn');
@@ -327,8 +450,14 @@ For example:
         if (pendingChanges.customPrompt) {
           saveCustomPrompt();
         }
+        if (pendingChanges.customModel) {
+          saveCustomModel();
+        }
+        if (pendingChanges.customLanguages) {
+          saveCustomLanguages();
+        }
 
-        if (!pendingChanges.apiKeys && !pendingChanges.customPrompt) {
+        if (!pendingChanges.apiKeys && !pendingChanges.customPrompt && !pendingChanges.customModel && !pendingChanges.customLanguages) {
           showStatus('No changes to save', false);
         }
 

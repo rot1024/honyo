@@ -12,11 +12,11 @@
 ## Features
 
 - ⚡ **Instant Translation** - Double Ctrl+C to translate any selected text
-- 🌍 **15+ Languages** - Japanese, English, Chinese, Korean, Spanish, French, German, and more
-- 🤖 **Latest AI Models** - Claude 3.7, GPT-4.1, Gemini 2.0, and others
-- 🔄 **Smart Detection** - Auto-detects language and switches between primary/secondary targets
-- 💻 **Lightweight** - Lives in your system tray, notification or popup display modes
-- 📝 **Customizable** - Add your own translation rules and terminology
+- 🌍 **Multi-Language** - 15+ built-in languages plus custom language support
+- 🤖 **AI Models** - Latest models from Claude, GPT-4, Gemini, or use your own
+- 🔄 **Smart Detection** - Auto-detects language and switches translation direction
+- 💻 **Lightweight** - Lives in your system tray with minimal resource usage
+- 🎯 **Customizable** - Add your own translation rules, languages, and models
 
 ## Configuration
 
@@ -59,6 +59,25 @@ Examples of custom instructions:
 - Maintain consistent terminology
 - Follow specific industry standards
 
+### Custom AI Models
+
+Use any AI model not included in the default list:
+
+1. Open Settings → "Custom Model" tab
+2. Enter the model name (e.g., `gpt-4-1106-preview`, `claude-3-opus-20240229`)
+3. Select the provider (Anthropic, OpenAI, or Google AI)
+4. Click "Save"
+5. Select "Custom Model" from the AI Model menu
+
+### Custom Languages
+
+Add languages not included in the default list:
+
+1. Open Settings → "Custom Languages" tab
+2. Enter language names, one per line (e.g., Esperanto, Sanskrit, Klingon)
+3. Click "Save"
+4. Your custom languages will appear in the Primary/Secondary language menus
+
 ## Usage
 
 1. Select any text in any application
@@ -75,10 +94,12 @@ The app intelligently determines the translation direction:
 ### Menu Options
 
 Access these options by clicking the system tray icon:
-- **Primary/Secondary Language**: Set your translation language preferences
-- **AI Model**: Choose which AI model to use for translations
-- **Settings**: Configure API keys and custom instructions
+- **Primary/Secondary Language**: Set your translation language preferences (including custom languages)
+- **Display Mode**: Choose between notification and popup window
+- **AI Model**: Choose which AI model to use for translations (including custom models)
+- **Settings**: Configure API keys, custom instructions, models, and languages
 - **Pause Translation**: Temporarily disable the translation feature
+- **Check for Updates**: Check for new versions of the app
 - **Quit**: Exit the application
 
 ### Environment Variables

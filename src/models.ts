@@ -88,3 +88,4 @@ export const AI_MODELS: Record<string, AIModelInfo> = {
 };
 
 export const DEFAULT_AI_MODEL = Object.keys(AI_MODELS)[0] ?? 'claude-3.5-haiku';
+export const CUSTOM_MODEL_ID = 'custom-model';

@@ -93,7 +93,7 @@
         "to": "icons/icon-normal.png"
       },
       {
-        "from": "src/ui/icon-translating.png", 
+        "from": "src/ui/icon-translating.png",
         "to": "icons/icon-translating.png"
       }
     ],

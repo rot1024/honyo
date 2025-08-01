@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { languages } from '../language/index.ts';
-import { AI_MODELS } from '../models.ts';
+import { AI_MODELS, CUSTOM_MODEL_ID } from '../models.ts';
 import { getConfig, updateConfig, getPausedState, setPausedState } from '../config/index.ts';
 import { openSettingsWindow } from './settings.ts';
 import { checkForUpdates } from '../app/updater.ts';
@@ -27,6 +27,12 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
   const config = getConfig();
   const isPaused = getPausedState();
 
+  // Combine default languages with custom languages
+  const allLanguages = [...languages];
+  if (config.customLanguages && config.customLanguages.length > 0) {
+    allLanguages.push(...config.customLanguages);
+  }
+
   const contextMenu = Menu.buildFromTemplate([
     {
       label: `Honyo Translator ${appVersion ? `v${appVersion}` : ''}`,
@@ -36,7 +42,7 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
     { type: 'separator' },
     {
       label: `Primary: ${config.targetLanguage}`,
-      submenu: languages.map(lang => ({
+      submenu: allLanguages.map(lang => ({
         label: lang,
         type: 'radio',
         checked: config.targetLanguage === lang,
@@ -56,7 +62,7 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
     },
     {
       label: `Secondary: ${config.secondaryLanguage}`,
-      submenu: languages.map(lang => ({
+      submenu: allLanguages.map(lang => ({
         label: lang,
         type: 'radio',
         checked: config.secondaryLanguage === lang,
@@ -99,16 +105,32 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       ],
     },
     {
-      label: `AI Model: ${AI_MODELS[config.aiModel]?.name ?? 'Unknown'}`,
-      submenu: Object.entries(AI_MODELS).map(([modelId, modelInfo]) => ({
-        label: modelInfo.name,
-        type: 'radio',
-        checked: config.aiModel === modelId,
-        click: (): void => {
-          updateConfig({ aiModel: modelId });
-          tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+      label: `AI Model: ${
+        config.aiModel === CUSTOM_MODEL_ID
+          ? 'Custom Model'
+          : AI_MODELS[config.aiModel]?.name ?? 'Unknown'
+      }`,
+      submenu: [
+        ...Object.entries(AI_MODELS).map(([modelId, modelInfo]) => ({
+          label: modelInfo.name,
+          type: 'radio' as const,
+          checked: config.aiModel === modelId,
+          click: (): void => {
+            updateConfig({ aiModel: modelId });
+            tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+          },
+        })),
+        { type: 'separator' as const },
+        {
+          label: 'Custom Model',
+          type: 'radio' as const,
+          checked: config.aiModel === CUSTOM_MODEL_ID,
+          click: (): void => {
+            updateConfig({ aiModel: CUSTOM_MODEL_ID });
+            tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+          },
         },
-      })),
+      ],
     },
     {
       label: 'Settings...',

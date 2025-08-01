@@ -5,6 +5,7 @@ import {
   getConfig,
   updateConfig,
   type ApiKeys,
+  type CustomModel,
 } from '../config/index.ts';
 
 let settingsWindow: BrowserWindow | null = null;
@@ -53,5 +54,25 @@ export function setupSettingsIPC(): void {
   ipcMain.on('save-custom-prompt', (event, customPrompt: string) => {
     updateConfig({ customPrompt });
     event.reply('custom-prompt-saved', true);
+  });
+
+  ipcMain.on('load-custom-model', event => {
+    const config = getConfig();
+    event.reply('custom-model-loaded', config.customModel);
+  });
+
+  ipcMain.on('save-custom-model', (event, customModel: CustomModel) => {
+    updateConfig({ customModel });
+    event.reply('custom-model-saved', true);
+  });
+
+  ipcMain.on('load-custom-languages', event => {
+    const config = getConfig();
+    event.reply('custom-languages-loaded', config.customLanguages || []);
+  });
+
+  ipcMain.on('save-custom-languages', (event, customLanguages: string[]) => {
+    updateConfig({ customLanguages });
+    event.reply('custom-languages-saved', true);
   });
 }

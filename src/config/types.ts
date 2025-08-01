@@ -6,6 +6,11 @@ export interface ApiKeys {
 
 export type DisplayMode = 'notification' | 'popup';
 
+export interface CustomModel {
+  model: string;
+  provider: 'anthropic' | 'openai' | 'google';
+}
+
 export interface Config {
   targetLanguage: string;
   secondaryLanguage: string;
@@ -13,6 +18,8 @@ export interface Config {
   aiModel: string;
   customPrompt: string;
   displayMode: DisplayMode;
+  customModel?: CustomModel;
+  customLanguages?: string[];
 }
 
 export interface SavedConfig extends Config {
