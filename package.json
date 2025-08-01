@@ -1,11 +1,12 @@
 {
   "name": "honyo",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "src/main.ts",
   "type": "module",
   "scripts": {
+    "_comment": "NOTE: 'build' and 'dist' scripts are temporary until Electron supports Node v24. See scripts/build-esbuild.js for details.",
     "start": "NODE_OPTIONS=\"--experimental-strip-types\" electron .",
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint src/**/*.ts --cache",
     "lint:fix": "eslint src/**/*.ts --fix --cache",
     "format": "prettier --write \"src/**/*.ts\" \"*.html\"",
@@ -13,8 +14,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "build": "tsc && electron-builder",
-    "dist": "electron-builder",
+    "build": "node scripts/build.js",
+    "dist": "npm run build && electron-builder",
     "dist:mac": "electron-builder --mac",
     "dist:win": "electron-builder --win",
     "dist:linux": "electron-builder --linux"
@@ -36,8 +37,10 @@
     "@vitest/ui": "^3.2.4",
     "electron": "^37.2.5",
     "electron-builder": "^26.0.12",
+    "esbuild": "^0.24.0",
     "eslint": "^9.32.0",
     "eslint-plugin-import": "^2.32.0",
+    "glob": "^11.0.0",
     "globals": "^16.3.0",
     "jiti": "^2.5.1",
     "prettier": "^3.6.2",
@@ -52,7 +55,8 @@
     "@ai-sdk/openai": "^2.0.0",
     "ai": "^5.0.0",
     "dotenv": "^17.2.1",
-    "uiohook-napi": "^1.5.4"
+    "uiohook-napi": "^1.5.4",
+    "zod": "^3.25.76"
   },
   "build": {
     "appId": "com.rot1024.honyo",
@@ -61,13 +65,23 @@
       "output": "dist"
     },
     "files": [
-      "src/**/*",
-      "index.html",
-      "node_modules/**/*"
+      "build/**/*",
+      "popup.html",
+      "settings.html",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraMetadata": {
+      "main": "build/main.js"
+    },
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/uiohook-napi/**/*"
     ],
     "mac": {
       "category": "public.app-category.utilities"
     },
+    "npmRebuild": true,
     "win": {
       "target": "nsis"
     },

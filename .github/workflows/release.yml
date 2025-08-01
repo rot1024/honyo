@@ -25,7 +25,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Build TypeScript
+    - name: Type check
       run: npm run typecheck
 
     - name: Build Electron app

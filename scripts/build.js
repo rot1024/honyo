@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+
+// NOTE: This build process is temporary until Electron supports Node v24
+// When Electron supports Node v24 (where TypeScript support is built-in), we can:
+// 1. Remove this entire scripts/ directory
+// 2. Remove the "build" script from package.json
+// 3. Change "dist" script back to just "electron-builder"
+// 4. Use src/*.ts files directly without compilation
+// 5. Remove NODE_OPTIONS="--experimental-strip-types" from the start script
+
+import esbuild from 'esbuild';
+import { readFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import { readdirSync, statSync, rmSync } from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const rootDir = join(__dirname, '..');
+
+// Clean build directory
+const buildDir = join(rootDir, 'build');
+if (existsSync(buildDir)) {
+  rmSync(buildDir, { recursive: true, force: true });
+}
+
+// Find all TypeScript files recursively
+function findTsFiles(dir, files = []) {
+  const entries = readdirSync(dir);
+  for (const entry of entries) {
+    const fullPath = join(dir, entry);
+    const stat = statSync(fullPath);
+    if (stat.isDirectory()) {
+      findTsFiles(fullPath, files);
+    } else if (entry.endsWith('.ts') && !entry.endsWith('.test.ts') && !entry.endsWith('.spec.ts')) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+const entryPoints = findTsFiles(join(rootDir, 'src'));
+
+console.log('Building with esbuild...');
+
+try {
+  await esbuild.build({
+    entryPoints,
+    bundle: false, // Keep individual files
+    outdir: 'build',
+    format: 'esm',
+    platform: 'node',
+    target: 'node18',
+    sourcemap: true,
+    resolveExtensions: ['.ts', '.js'],
+    loader: {
+      '.ts': 'ts'
+    },
+    // Remove plugins for now
+  });
+  
+  console.log('Build completed successfully with esbuild!');
+  
+  // Fix imports with .ts extensions
+  console.log('Fixing import extensions...');
+  await fixImports(buildDir);
+  console.log('Import extensions fixed!');
+} catch (error) {
+  console.error('Build failed:', error);
+  process.exit(1);
+}
+
+// Function to fix .ts extensions in imports
+async function fixImports(dir) {
+  const { readdir, readFile, writeFile } = await import('fs/promises');
+  const files = await readdir(dir, { withFileTypes: true });
+  
+  for (const file of files) {
+    const fullPath = join(dir, file.name);
+    
+    if (file.isDirectory()) {
+      await fixImports(fullPath);
+    } else if (file.name.endsWith('.js')) {
+      let content = await readFile(fullPath, 'utf-8');
+      // Fix imports with .ts extensions
+      content = content.replace(/from\s+["'](.+?)\.ts["']/g, 'from "$1.js"');
+      content = content.replace(/import\s*\(\s*["'](.+?)\.ts["']\s*\)/g, 'import("$1.js")');
+      await writeFile(fullPath, content);
+    }
+  }
+}
