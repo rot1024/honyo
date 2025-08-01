@@ -108,7 +108,7 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       label: `AI Model: ${
         config.aiModel === CUSTOM_MODEL_ID
           ? 'Custom Model'
-          : AI_MODELS[config.aiModel]?.name ?? 'Unknown'
+          : (AI_MODELS[config.aiModel]?.name ?? 'Unknown')
       }`,
       submenu: [
         ...Object.entries(AI_MODELS).map(([modelId, modelInfo]) => ({

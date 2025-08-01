@@ -8,7 +8,7 @@ import type { ApiKeys, CustomModel } from '../config/types.ts';
 export function getAIProvider(
   modelId: string,
   apiKeys: ApiKeys,
-  customModel?: CustomModel
+  customModel?: CustomModel,
 ): LanguageModel {
   if (modelId === CUSTOM_MODEL_ID) {
     if (!customModel || !customModel.model || !customModel.provider) {

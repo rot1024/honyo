@@ -1,7 +1,6 @@
 import { Tray } from 'electron';
 import { createNormalIcon, createTranslatingIcon } from './icons.ts';
 import { createTrayMenu } from './menu.ts';
-import { getPausedState } from '../config/index.ts';
 
 let tray: Tray | null = null;
 let normalIcon: Electron.NativeImage | null = null;
@@ -14,7 +13,6 @@ export function createTray(): Tray {
 
   if (!normalIcon) throw new Error('Normal icon not created');
   tray = new Tray(normalIcon);
-
 
   console.log('Tray created successfully');
 

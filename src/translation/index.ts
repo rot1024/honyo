@@ -93,7 +93,7 @@ Text to translate: ${text}`,
       const modelName =
         config.aiModel === CUSTOM_MODEL_ID
           ? 'Custom Model'
-          : AI_MODELS[config.aiModel]?.name ?? 'selected model';
+          : (AI_MODELS[config.aiModel]?.name ?? 'selected model');
       new Notification({
         title: 'API Key Missing',
         body: `Please configure API key for ${modelName}`,

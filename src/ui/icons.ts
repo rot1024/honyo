@@ -19,7 +19,7 @@ export function createNormalIcon(): Electron.NativeImage {
   const iconPath = getIconPath('icon-normal.png');
   const iconBuffer = readFileSync(iconPath);
   const icon = nativeImage.createFromBuffer(iconBuffer);
-  
+
   // Set DPI for proper retina display
   const scaledIcon = icon.resize({ width: 16, height: 16 });
 
@@ -35,7 +35,7 @@ export function createTranslatingIcon(): Electron.NativeImage {
   const iconPath = getIconPath('icon-translating.png');
   const iconBuffer = readFileSync(iconPath);
   const icon = nativeImage.createFromBuffer(iconBuffer);
-  
+
   // Set DPI for proper retina display
   const scaledIcon = icon.resize({ width: 16, height: 16 });
 

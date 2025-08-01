@@ -14,7 +14,7 @@ export async function checkAccessibilityPermission(): Promise<boolean> {
 
   if (!isTrusted) {
     console.log('Showing accessibility dialog...');
-    // eslint-disable-next-line @typescript-eslint/await-thenable
+
     const result = await dialog.showMessageBox({
       type: 'warning',
       title: 'Accessibility Permission Required',
@@ -31,7 +31,7 @@ export async function checkAccessibilityPermission(): Promise<boolean> {
     if (result.response === 0) {
       console.log('Opening System Preferences...');
       // Open System Preferences to the Privacy > Accessibility pane
-      // eslint-disable-next-line @typescript-eslint/await-thenable
+
       const opened = await shell.openExternal(
         'x-apple.systempreferences:com.apple.preference.security?Privacy_Accessibility',
       );

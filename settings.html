@@ -245,10 +245,12 @@ For example:
 
           <div class="form-group">
             <label for="custom-model-name">Model Name</label>
-            <input type="text" id="custom-model-name" placeholder="gpt-4-1106-preview, claude-3-opus-20240229, etc." />
-            <div class="help-text">
-              Enter the exact model ID/name from your provider
-            </div>
+            <input
+              type="text"
+              id="custom-model-name"
+              placeholder="gpt-4-1106-preview, claude-3-opus-20240229, etc."
+            />
+            <div class="help-text">Enter the exact model ID/name from your provider</div>
           </div>
 
           <div class="form-group">
@@ -259,9 +261,7 @@ For example:
               <option value="openai">OpenAI</option>
               <option value="google">Google AI</option>
             </select>
-            <div class="help-text">
-              Select which API provider to use for this model
-            </div>
+            <div class="help-text">Select which API provider to use for this model</div>
           </div>
 
           <div class="status" id="custom-model-status"></div>
@@ -284,8 +284,8 @@ Klingon
 Ancient Greek"
             ></textarea>
             <div class="help-text">
-              Add custom languages that will appear in the language selection menus.
-              Enter one language name per line.
+              Add custom languages that will appear in the language selection menus. Enter one
+              language name per line.
             </div>
           </div>
 
@@ -457,7 +457,12 @@ Ancient Greek"
           saveCustomLanguages();
         }
 
-        if (!pendingChanges.apiKeys && !pendingChanges.customPrompt && !pendingChanges.customModel && !pendingChanges.customLanguages) {
+        if (
+          !pendingChanges.apiKeys &&
+          !pendingChanges.customPrompt &&
+          !pendingChanges.customModel &&
+          !pendingChanges.customLanguages
+        ) {
           showStatus('No changes to save', false);
         }
 
