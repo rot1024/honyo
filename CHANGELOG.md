@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.1](https://github.com/rot1024/honyo/compare/v0.3.0...v0.3.1) (2025-08-01)
+
+
+### Bug Fixes
+
+* mac binary did not work ([0a4b015](https://github.com/rot1024/honyo/commit/0a4b01504b5695e8aa349f0e661df91e6ab21f93))
+
 ## [0.3.0](https://github.com/rot1024/honyo/compare/v0.2.0...v0.3.0) (2025-08-01)
 
 
