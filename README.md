@@ -18,6 +18,40 @@
 - 💻 **Lightweight** - Lives in your system tray with minimal resource usage
 - 🎯 **Customizable** - Add your own translation rules, languages, and models
 
+## Installation
+
+### macOS
+
+1. Download the appropriate version for your Mac:
+   - **Apple Silicon (M1/M2/M3)**: Download `Honyo-*-arm64.dmg` or `Honyo-*-arm64-mac.zip`
+   - **Intel Mac**: Download `Honyo-*.dmg` or `Honyo-*-mac.zip`
+
+2. **For DMG files**:
+   - Open the DMG file
+   - Drag Honyo.app to your Applications folder
+   - **First launch**: Right-click (or Control-click) on Honyo.app and select "Open"
+   - Click "Open" in the security dialog
+
+3. **For ZIP files**:
+   - Extract the zip file
+   - Move `Honyo.app` to your Applications folder
+   - Remove the quarantine attribute:
+     ```bash
+     xattr -cr /Applications/Honyo.app
+     ```
+
+4. Grant accessibility permissions:
+   - Open System Preferences > Security & Privacy > Privacy > Accessibility
+   - Add and enable Honyo.app
+
+### Windows
+
+Download and run `Honyo-*.exe`
+
+### Linux
+
+Download and run `Honyo-*.AppImage`
+
 ## Configuration
 
 ### API Keys
