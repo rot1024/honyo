@@ -80,14 +80,29 @@
       "node_modules/uiohook-napi/**/*"
     ],
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["x64", "arm64"]
+        }
+      ]
     },
     "npmRebuild": true,
     "win": {
       "target": "nsis"
     },
     "linux": {
-      "target": "AppImage"
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64", "arm64"]
+        }
+      ]
     }
   }
 }

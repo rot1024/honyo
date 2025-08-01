@@ -11,7 +11,17 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, windows-latest, ubuntu-latest]
+        include:
+          - os: macos-latest
+            arch: x64
+          - os: macos-latest
+            arch: arm64
+          - os: windows-latest
+            arch: x64
+          - os: ubuntu-latest
+            arch: x64
+          - os: ubuntu-latest
+            arch: arm64
 
     steps:
     - name: Checkout code
@@ -29,15 +39,17 @@ jobs:
       run: npm run typecheck
 
     - name: Build Electron app
-      run: npm run dist
+      run: npm run dist -- --${{ matrix.arch }}
       env:
         ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ matrix.os }}-build
-        path: dist/*
+        name: ${{ matrix.os }}-${{ matrix.arch }}-build
+        path: |
+          dist/*
+          !dist/builder-debug.yml
 
   release:
     needs: build
@@ -52,14 +64,21 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
 
+    - name: Remove builder-debug.yml files
+      run: |
+        find . -name "builder-debug.yml" -type f -delete
+
     - name: Create Release
       uses: softprops/action-gh-release@v2
       with:
         files: |
-          macos-latest-build/*
-          windows-latest-build/*
-          ubuntu-latest-build/*
+          macos-latest-x64-build/*
+          macos-latest-arm64-build/*
+          windows-latest-x64-build/*
+          ubuntu-latest-x64-build/*
+          ubuntu-latest-arm64-build/*
         draft: false
         prerelease: false
+        fail_on_unmatched_files: false
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
