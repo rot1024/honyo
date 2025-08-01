@@ -24,4 +24,3 @@ export function getLanguageFromLocale(locale: string): string {
 }
 
 export { LANGUAGES, languages } from './constants.ts';
-export { detectLanguage } from './detector.ts';
