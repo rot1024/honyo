@@ -1,0 +1,106 @@
+import { app } from 'electron';
+import { config as loadEnv } from 'dotenv';
+import { DEFAULT_AI_MODEL, AI_MODELS } from '../models.ts';
+import { getLanguageFromLocale } from '../language/index.ts';
+import { LANGUAGES } from '../language/constants.ts';
+import {
+  loadConfigFromFile,
+  saveConfigToFile,
+  loadApiKeysFromFile,
+  saveApiKeysToFile,
+} from './storage.ts';
+import type { ApiKeys, Config } from './types.ts';
+
+loadEnv();
+
+// Global state
+let config: Config;
+let apiKeys: ApiKeys;
+let isPaused = false;
+
+// Initialize API keys from environment
+const defaultApiKeys: ApiKeys = {
+  anthropic: process.env.ANTHROPIC_API_KEY || '',
+  openai: process.env.OPENAI_API_KEY || '',
+  google: process.env.GOOGLE_API_KEY || '',
+};
+
+function getDefaultConfig(): Config {
+  const locale = app.getLocale();
+  console.log('System locale:', locale);
+
+  // Set primary language based on system language
+  const primaryLang = getLanguageFromLocale(locale);
+
+  // If primary is English, set secondary to Japanese
+  const englishLang = LANGUAGES.en ?? 'English';
+  const japaneseLang = LANGUAGES.ja ?? 'Japanese';
+  const secondaryLang = primaryLang === englishLang ? japaneseLang : englishLang;
+
+  return {
+    targetLanguage: primaryLang,
+    secondaryLanguage: secondaryLang,
+    isPaused: false,
+    aiModel: DEFAULT_AI_MODEL,
+  };
+}
+
+export function initializeConfig(): void {
+  const defaultConfig = getDefaultConfig();
+  config = loadConfigFromFile(defaultConfig);
+
+  // Check settings consistency
+  if (config.targetLanguage === config.secondaryLanguage) {
+    // If same language, reapply default settings
+    const newDefaultConfig = getDefaultConfig();
+    config.secondaryLanguage = newDefaultConfig.secondaryLanguage;
+  }
+
+  // Validate AI model exists
+  if (!AI_MODELS[config.aiModel]) {
+    console.log(`Invalid AI model: ${config.aiModel}, resetting to default`);
+    config.aiModel = DEFAULT_AI_MODEL;
+  }
+
+  // Restore isPaused state
+  const savedIsPaused = (config as Config & { isPaused?: boolean }).isPaused;
+  if (typeof savedIsPaused === 'boolean') {
+    isPaused = savedIsPaused;
+  }
+
+  // Load API keys
+  apiKeys = loadApiKeysFromFile(defaultApiKeys);
+}
+
+export function getConfig(): Config {
+  return config;
+}
+
+export function updateConfig(updates: Partial<Config>): void {
+  config = { ...config, ...updates };
+  saveConfig();
+}
+
+export function saveConfig(): void {
+  saveConfigToFile(config, isPaused);
+}
+
+export function getApiKeys(): ApiKeys {
+  return apiKeys;
+}
+
+export function updateApiKeys(updates: Partial<ApiKeys>): void {
+  apiKeys = { ...apiKeys, ...updates };
+  saveApiKeysToFile(apiKeys);
+}
+
+export function getPausedState(): boolean {
+  return isPaused;
+}
+
+export function setPausedState(paused: boolean): void {
+  isPaused = paused;
+  saveConfig();
+}
+
+export type { ApiKeys, Config } from './types';
