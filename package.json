@@ -12,7 +12,12 @@
     "format:check": "prettier --check \"src/**/*.ts\" \"*.html\"",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage"
+    "test:coverage": "vitest --coverage",
+    "build": "tsc && electron-builder",
+    "dist": "electron-builder",
+    "dist:mac": "electron-builder --mac",
+    "dist:win": "electron-builder --win",
+    "dist:linux": "electron-builder --linux"
   },
   "repository": "https://github.com/rot1024/honyo.git",
   "keywords": [],
@@ -31,6 +36,7 @@
     "@typescript-eslint/parser": "^8.38.0",
     "@vitest/ui": "^3.2.4",
     "electron": "^37.2.5",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.32.0",
     "eslint-plugin-import": "^2.32.0",
     "globals": "^16.3.0",
@@ -48,5 +54,26 @@
     "ai": "^5.0.0",
     "dotenv": "^17.2.1",
     "uiohook-napi": "^1.5.4"
+  },
+  "build": {
+    "appId": "com.rot1024.honyo",
+    "productName": "Honyo",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "index.html",
+      "node_modules/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }
