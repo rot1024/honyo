@@ -9,41 +9,49 @@ export function setupAutoUpdater(): void {
 
   // Check for updates on startup and every hour
   void autoUpdater.checkForUpdates();
-  setInterval(() => {
-    void autoUpdater.checkForUpdates();
-  }, 60 * 60 * 1000); // 1 hour
+  setInterval(
+    () => {
+      void autoUpdater.checkForUpdates();
+    },
+    60 * 60 * 1000,
+  ); // 1 hour
 
   // Event handlers
   autoUpdater.on('checking-for-update', () => {
     console.log('Checking for update...');
   });
 
-  autoUpdater.on('update-available', (info) => {
+  autoUpdater.on('update-available', info => {
     console.log('Update available:', info);
 
-    void dialog.showMessageBox({
-      type: 'info',
-      title: 'Update Available',
-      message: `A new version ${info.version} is available. Would you like to download it?`,
-      detail: typeof info.releaseNotes === 'string' ? info.releaseNotes : 'New version available with improvements and bug fixes.',
-      buttons: ['Download', 'Later'],
-      defaultId: 0,
-    }).then((result) => {
-      if (result.response === 0) {
-        void autoUpdater.downloadUpdate();
-      }
-    });
+    void dialog
+      .showMessageBox({
+        type: 'info',
+        title: 'Update Available',
+        message: `A new version ${info.version} is available. Would you like to download it?`,
+        detail:
+          typeof info.releaseNotes === 'string'
+            ? info.releaseNotes
+            : 'New version available with improvements and bug fixes.',
+        buttons: ['Download', 'Later'],
+        defaultId: 0,
+      })
+      .then(result => {
+        if (result.response === 0) {
+          void autoUpdater.downloadUpdate();
+        }
+      });
   });
 
   autoUpdater.on('update-not-available', () => {
     console.log('Update not available');
   });
 
-  autoUpdater.on('error', (err) => {
+  autoUpdater.on('error', err => {
     console.error('Error in auto-updater:', err);
   });
 
-  autoUpdater.on('download-progress', (progressObj) => {
+  autoUpdater.on('download-progress', progressObj => {
     const logMessage = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
     console.log(logMessage);
 
@@ -54,7 +62,7 @@ export function setupAutoUpdater(): void {
     });
   });
 
-  autoUpdater.on('update-downloaded', (info) => {
+  autoUpdater.on('update-downloaded', info => {
     console.log('Update downloaded:', info);
 
     // Reset progress bar
@@ -63,18 +71,23 @@ export function setupAutoUpdater(): void {
       window.setProgressBar(-1);
     });
 
-    void dialog.showMessageBox({
-      type: 'info',
-      title: 'Update Ready',
-      message: 'Update downloaded. The application will restart to apply the update.',
-      detail: typeof info.releaseNotes === 'string' ? info.releaseNotes : 'The update will be installed when you restart the application.',
-      buttons: ['Restart Now', 'Later'],
-      defaultId: 0,
-    }).then((result) => {
-      if (result.response === 0) {
-        autoUpdater.quitAndInstall();
-      }
-    });
+    void dialog
+      .showMessageBox({
+        type: 'info',
+        title: 'Update Ready',
+        message: 'Update downloaded. The application will restart to apply the update.',
+        detail:
+          typeof info.releaseNotes === 'string'
+            ? info.releaseNotes
+            : 'The update will be installed when you restart the application.',
+        buttons: ['Restart Now', 'Later'],
+        defaultId: 0,
+      })
+      .then(result => {
+        if (result.response === 0) {
+          autoUpdater.quitAndInstall();
+        }
+      });
   });
 }
 
