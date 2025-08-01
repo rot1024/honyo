@@ -21,7 +21,11 @@
     "dist:win": "electron-builder --win",
     "dist:linux": "electron-builder --linux",
     "changelog": "conventional-changelog -p angular -o RELEASE_NOTES.md -r 1",
-    "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0"
+    "changelog:all": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "release": "standard-version",
+    "release:minor": "standard-version --release-as minor",
+    "release:major": "standard-version --release-as major",
+    "release:patch": "standard-version --release-as patch"
   },
   "repository": "https://github.com/rot1024/honyo.git",
   "keywords": [],
@@ -50,6 +54,7 @@
     "icon-gen": "^5.0.0",
     "jiti": "^2.5.1",
     "prettier": "^3.6.2",
+    "standard-version": "^9.5.0",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.38.0",
