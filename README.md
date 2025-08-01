@@ -16,6 +16,7 @@ A desktop application that provides instant AI-powered translation with a simple
 - **Translation Status Indicator**: Visual feedback showing when translation is in progress
 - **Pause/Resume**: Temporarily disable translation when needed
 - **Single Instance**: Prevents multiple instances from running simultaneously
+- **Custom Instructions**: Add your own translation guidelines and terminology
 
 ## Configuration
 
@@ -24,8 +25,8 @@ A desktop application that provides instant AI-powered translation with a simple
 To use the translation features, you need to configure API keys for your preferred AI provider:
 
 1. Click on the system tray icon
-2. Select "API Key Settings..."
-3. Enter your API keys for the providers you want to use:
+2. Select "Settings..."
+3. In the "API Keys" tab, enter your API keys for the providers you want to use:
    - **Anthropic**: Get your key from [console.anthropic.com](https://console.anthropic.com/)
    - **OpenAI**: Get your key from [platform.openai.com](https://platform.openai.com/api-keys)
    - **Google AI**: Get your key from [makersuite.google.com](https://makersuite.google.com/app/apikey)
@@ -41,6 +42,22 @@ The app automatically detects your system language and sets appropriate defaults
 You can change these settings from the system tray menu:
 1. Click on "Primary: [Language]" to select your primary translation target
 2. Click on "Secondary: [Language]" to select your fallback language
+
+### Custom Instructions
+
+You can add custom instructions that will be included in all translations:
+
+1. Click on the system tray icon
+2. Select "Settings..."
+3. Go to the "Custom Prompt" tab
+4. Enter your custom instructions (e.g., terminology guidelines, tone preferences, specific translation rules)
+5. Click "Save"
+
+Examples of custom instructions:
+- Use formal language
+- Keep product names in English
+- Maintain consistent terminology
+- Follow specific industry standards
 
 ## Usage
 
@@ -60,7 +77,7 @@ The app intelligently determines the translation direction:
 Access these options by clicking the system tray icon:
 - **Primary/Secondary Language**: Set your translation language preferences
 - **AI Model**: Choose which AI model to use for translations
-- **API Key Settings**: Configure your API keys
+- **Settings**: Configure API keys and custom instructions
 - **Pause Translation**: Temporarily disable the translation feature
 - **Quit**: Exit the application
 

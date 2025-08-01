@@ -42,6 +42,7 @@ function getDefaultConfig(): Config {
     secondaryLanguage: secondaryLang,
     isPaused: false,
     aiModel: DEFAULT_AI_MODEL,
+    customPrompt: '',
   };
 }
 
@@ -60,6 +61,11 @@ export function initializeConfig(): void {
   if (!AI_MODELS[config.aiModel]) {
     console.log(`Invalid AI model: ${config.aiModel}, resetting to default`);
     config.aiModel = DEFAULT_AI_MODEL;
+  }
+
+  // Initialize custom prompt if not present
+  if (config.customPrompt === undefined) {
+    config.customPrompt = '';
   }
 
   // Restore isPaused state

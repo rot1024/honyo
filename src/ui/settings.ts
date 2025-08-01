@@ -1,5 +1,11 @@
 import { BrowserWindow, ipcMain } from 'electron';
-import { getApiKeys, updateApiKeys, type ApiKeys } from '../config/index.ts';
+import {
+  getApiKeys,
+  updateApiKeys,
+  getConfig,
+  updateConfig,
+  type ApiKeys,
+} from '../config/index.ts';
 
 let settingsWindow: BrowserWindow | null = null;
 
@@ -10,16 +16,16 @@ export function openSettingsWindow(): void {
   }
 
   settingsWindow = new BrowserWindow({
-    width: 600,
-    height: 500,
+    width: 800,
+    height: 600,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
-    resizable: false,
-    minimizable: false,
-    maximizable: false,
-    title: 'API Key Settings',
+    resizable: true,
+    minimizable: true,
+    maximizable: true,
+    title: 'Settings',
   });
 
   void settingsWindow.loadFile('settings.html');
@@ -37,5 +43,15 @@ export function setupSettingsIPC(): void {
   ipcMain.on('save-api-keys', (event, keys: Partial<ApiKeys>) => {
     updateApiKeys(keys);
     event.reply('api-keys-saved', true);
+  });
+
+  ipcMain.on('load-custom-prompt', event => {
+    const config = getConfig();
+    event.reply('custom-prompt-loaded', config.customPrompt);
+  });
+
+  ipcMain.on('save-custom-prompt', (event, customPrompt: string) => {
+    updateConfig({ customPrompt });
+    event.reply('custom-prompt-saved', true);
   });
 }

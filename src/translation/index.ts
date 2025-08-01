@@ -54,10 +54,15 @@ export async function translateText(
 
     console.log(`Translating text to ${targetLanguage}:`, text.slice(0, 50) + '...');
 
+    // Add custom prompt if configured
+    const customPromptSection = config.customPrompt
+      ? `\n\nAdditional instructions:\n${config.customPrompt}\n`
+      : '';
+
     const { text: translation } = await generateText({
       model,
       prompt: `You are a translator. Translate the following text to ${targetLanguage}.
-IMPORTANT: Return ONLY the translated text. Do not include any explanations, notes, or phrases like "Here is the translation" or "The translation is". Just the translated text itself.
+IMPORTANT: Return ONLY the translated text. Do not include any explanations, notes, or phrases like "Here is the translation" or "The translation is". Just the translated text itself.${customPromptSection}
 
 Text to translate: ${text}`,
     });

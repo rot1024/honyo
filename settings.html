@@ -1,164 +1,362 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>API Key Settings</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      padding: 20px;
-      background: #f5f5f5;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      margin-top: 0;
-      color: #333;
-    }
-    .form-group {
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-      color: #555;
-      font-weight: 500;
-    }
-    input[type="password"] {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      box-sizing: border-box;
-    }
-    input[type="password"]:focus {
-      outline: none;
-      border-color: #007aff;
-    }
-    .help-text {
-      font-size: 12px;
-      color: #666;
-      margin-top: 5px;
-    }
-    .buttons {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 30px;
-    }
-    button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 4px;
-      font-size: 14px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    .save-btn {
-      background: #007aff;
-      color: white;
-    }
-    .save-btn:hover {
-      background: #0056b3;
-    }
-    .cancel-btn {
-      background: #e0e0e0;
-      color: #333;
-    }
-    .cancel-btn:hover {
-      background: #d0d0d0;
-    }
-    .status {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 4px;
-      font-size: 14px;
-      display: none;
-    }
-    .status.success {
-      background: #d4edda;
-      color: #155724;
-      display: block;
-    }
-    .status.error {
-      background: #f8d7da;
-      color: #721c24;
-      display: block;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>API Key Settings</h2>
-    
-    <div class="form-group">
-      <label for="anthropic-key">Anthropic API Key</label>
-      <input type="password" id="anthropic-key" placeholder="sk-ant-api03-...">
-      <div class="help-text">Get your API key from <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Settings</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        padding: 0;
+        margin: 0;
+        background: #f5f5f5;
+        height: 100%;
+        overflow: hidden;
+      }
+      .tabs {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding-right: 20px;
+      }
+      .tab-group {
+        display: flex;
+      }
+      .tab {
+        padding: 15px 30px;
+        cursor: pointer;
+        background: none;
+        border: none;
+        font-size: 14px;
+        color: #666;
+        transition: all 0.2s;
+        border-bottom: 3px solid transparent;
+      }
+      .tab:hover {
+        color: #333;
+      }
+      .tab.active {
+        color: #007aff;
+        border-bottom-color: #007aff;
+      }
+      .content {
+        padding: 20px;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+      }
+      .tab-panel {
+        display: none;
+        animation: fadeIn 0.3s;
+      }
+      .tab-panel.active {
+        display: block;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        margin-top: 0;
+        color: #333;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: 500;
+      }
+      input[type='password'],
+      textarea {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+      input[type='password']:focus,
+      textarea:focus {
+        outline: none;
+        border-color: #007aff;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 150px;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.5;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: #ccc;
+      }
+      .help-text {
+        font-size: 12px;
+        color: #666;
+        margin-top: 5px;
+      }
+      .buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 30px;
+      }
+      button {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .save-btn {
+        background: #007aff;
+        color: white;
+      }
+      .save-btn:hover {
+        background: #0056b3;
+      }
+      .save-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+      .tab-save-btn {
+        padding: 6px 16px;
+        font-size: 13px;
+      }
+      .status {
+        margin-top: 10px;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 14px;
+        display: none;
+      }
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+        display: block;
+      }
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tabs">
+      <div class="tab-group">
+        <button class="tab active" onclick="switchTab('api-keys')">API Keys</button>
+        <button class="tab" onclick="switchTab('custom-prompt')">Custom Prompt</button>
+      </div>
+      <button class="save-btn tab-save-btn" id="save-all-btn" onclick="saveAll()">Save</button>
     </div>
 
-    <div class="form-group">
-      <label for="openai-key">OpenAI API Key</label>
-      <input type="password" id="openai-key" placeholder="sk-...">
-      <div class="help-text">Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a></div>
+    <div class="content">
+      <div id="api-keys" class="tab-panel active">
+        <div class="container">
+          <h2>API Key Settings</h2>
+
+          <div class="form-group">
+            <label for="anthropic-key">Anthropic API Key</label>
+            <input type="password" id="anthropic-key" placeholder="sk-ant-api03-..." />
+            <div class="help-text">
+              Get your API key from
+              <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="openai-key">OpenAI API Key</label>
+            <input type="password" id="openai-key" placeholder="sk-..." />
+            <div class="help-text">
+              Get your API key from
+              <a href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com</a>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="google-key">Google AI API Key</label>
+            <input type="password" id="google-key" placeholder="AIzaSy..." />
+            <div class="help-text">
+              Get your API key from
+              <a href="https://makersuite.google.com/app/apikey" target="_blank"
+                >makersuite.google.com</a
+              >
+            </div>
+          </div>
+
+          <div class="status" id="api-status"></div>
+        </div>
+      </div>
+
+      <div id="custom-prompt" class="tab-panel">
+        <div class="container">
+          <h2>Custom Prompt</h2>
+
+          <div class="form-group">
+            <label for="custom-prompt-input">Additional Instructions for Translation</label>
+            <textarea
+              id="custom-prompt-input"
+              placeholder="Enter custom instructions that will be included in all translations...
+For example:
+- Use formal language
+- Keep product names in English
+- Maintain consistent terminology"
+            ></textarea>
+            <div class="help-text">
+              These instructions will be added to every translation request.
+            </div>
+          </div>
+
+          <div class="status" id="prompt-status"></div>
+        </div>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label for="google-key">Google AI API Key</label>
-      <input type="password" id="google-key" placeholder="AIzaSy...">
-      <div class="help-text">Get your API key from <a href="https://makersuite.google.com/app/apikey" target="_blank">makersuite.google.com</a></div>
-    </div>
+    <script>
+      const { ipcRenderer } = require('electron');
 
-    <div class="status" id="status"></div>
-
-    <div class="buttons">
-      <button class="cancel-btn" onclick="window.close()">Cancel</button>
-      <button class="save-btn" onclick="saveKeys()">Save</button>
-    </div>
-  </div>
-
-  <script>
-    const { ipcRenderer } = require('electron');
-
-    // Load existing keys
-    window.addEventListener('DOMContentLoaded', () => {
-      ipcRenderer.send('load-api-keys');
-    });
-
-    ipcRenderer.on('api-keys-loaded', (event, keys) => {
-      if (keys.anthropic) document.getElementById('anthropic-key').value = keys.anthropic;
-      if (keys.openai) document.getElementById('openai-key').value = keys.openai;
-      if (keys.google) document.getElementById('google-key').value = keys.google;
-    });
-
-    function saveKeys() {
-      const keys = {
-        anthropic: document.getElementById('anthropic-key').value.trim(),
-        openai: document.getElementById('openai-key').value.trim(),
-        google: document.getElementById('google-key').value.trim()
+      let pendingChanges = {
+        apiKeys: false,
+        customPrompt: false,
       };
 
-      ipcRenderer.send('save-api-keys', keys);
-    }
+      // Tab switching
+      function switchTab(tabName) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
 
-    ipcRenderer.on('api-keys-saved', (event, success) => {
-      const status = document.getElementById('status');
-      if (success) {
-        status.className = 'status success';
-        status.textContent = 'API keys saved successfully!';
-        setTimeout(() => window.close(), 1500);
-      } else {
-        status.className = 'status error';
-        status.textContent = 'Failed to save API keys. Please try again.';
+        event.target.classList.add('active');
+        document.getElementById(tabName).classList.add('active');
       }
-    });
-  </script>
-</body>
+
+      // Load data on startup
+      window.addEventListener('DOMContentLoaded', () => {
+        ipcRenderer.send('load-api-keys');
+        ipcRenderer.send('load-custom-prompt');
+
+        // Add change listeners
+        document
+          .getElementById('anthropic-key')
+          .addEventListener('input', () => (pendingChanges.apiKeys = true));
+        document
+          .getElementById('openai-key')
+          .addEventListener('input', () => (pendingChanges.apiKeys = true));
+        document
+          .getElementById('google-key')
+          .addEventListener('input', () => (pendingChanges.apiKeys = true));
+        document
+          .getElementById('custom-prompt-input')
+          .addEventListener('input', () => (pendingChanges.customPrompt = true));
+      });
+
+      // API Keys functionality
+      ipcRenderer.on('api-keys-loaded', (event, keys) => {
+        if (keys.anthropic) document.getElementById('anthropic-key').value = keys.anthropic;
+        if (keys.openai) document.getElementById('openai-key').value = keys.openai;
+        if (keys.google) document.getElementById('google-key').value = keys.google;
+      });
+
+      function saveApiKeys() {
+        const keys = {
+          anthropic: document.getElementById('anthropic-key').value.trim(),
+          openai: document.getElementById('openai-key').value.trim(),
+          google: document.getElementById('google-key').value.trim(),
+        };
+
+        ipcRenderer.send('save-api-keys', keys);
+      }
+
+      ipcRenderer.on('api-keys-saved', (event, success) => {
+        if (success) {
+          pendingChanges.apiKeys = false;
+          showStatus('API keys saved successfully!', false);
+        } else {
+          showStatus('Failed to save API keys. Please try again.', true);
+        }
+      });
+
+      // Custom Prompt functionality
+      ipcRenderer.on('custom-prompt-loaded', (event, customPrompt) => {
+        document.getElementById('custom-prompt-input').value = customPrompt || '';
+      });
+
+      function saveCustomPrompt() {
+        const customPrompt = document.getElementById('custom-prompt-input').value.trim();
+        ipcRenderer.send('save-custom-prompt', customPrompt);
+      }
+
+      ipcRenderer.on('custom-prompt-saved', (event, success) => {
+        if (success) {
+          pendingChanges.customPrompt = false;
+          showStatus('Custom prompt saved successfully!', false);
+        } else {
+          showStatus('Failed to save custom prompt. Please try again.', true);
+        }
+      });
+
+      // Save all function
+      function saveAll() {
+        const saveBtn = document.getElementById('save-all-btn');
+        saveBtn.disabled = true;
+
+        if (pendingChanges.apiKeys) {
+          saveApiKeys();
+        }
+        if (pendingChanges.customPrompt) {
+          saveCustomPrompt();
+        }
+
+        if (!pendingChanges.apiKeys && !pendingChanges.customPrompt) {
+          showStatus('No changes to save', false);
+        }
+
+        setTimeout(() => {
+          saveBtn.disabled = false;
+        }, 1000);
+      }
+
+      // Status display function
+      function showStatus(message, isError) {
+        // Remove existing statuses
+        document.querySelectorAll('.status').forEach(status => {
+          status.className = 'status';
+          status.textContent = '';
+        });
+
+        // Show status in active tab
+        const activePanel = document.querySelector('.tab-panel.active');
+        const statusEl = activePanel.querySelector('.status');
+        if (statusEl) {
+          statusEl.className = `status ${isError ? 'error' : 'success'}`;
+          statusEl.textContent = message;
+          setTimeout(() => {
+            statusEl.className = 'status';
+            statusEl.textContent = '';
+          }, 3000);
+        }
+      }
+    </script>
+  </body>
 </html>

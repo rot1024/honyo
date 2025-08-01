@@ -9,6 +9,7 @@ export interface Config {
   secondaryLanguage: string;
   isPaused: boolean;
   aiModel: string;
+  customPrompt: string;
 }
 
 export interface SavedConfig extends Config {

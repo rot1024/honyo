@@ -8,8 +8,8 @@
     "typecheck": "tsc",
     "lint": "eslint src/**/*.ts --cache",
     "lint:fix": "eslint src/**/*.ts --fix --cache",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --check \"src/**/*.ts\"",
+    "format": "prettier --write \"src/**/*.ts\" \"*.html\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"*.html\"",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"

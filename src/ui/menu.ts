@@ -67,7 +67,7 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       })),
     },
     {
-      label: 'API Key Settings...',
+      label: 'Settings...',
       click: (): void => {
         openSettingsWindow();
       },
