@@ -20,8 +20,6 @@ jobs:
             arch: x64
           - os: ubuntu-latest
             arch: x64
-          - os: ubuntu-latest
-            arch: arm64
 
     steps:
     - name: Checkout code
@@ -76,7 +74,6 @@ jobs:
           macos-latest-arm64-build/*
           windows-latest-x64-build/*
           ubuntu-latest-x64-build/*
-          ubuntu-latest-arm64-build/*
         draft: false
         prerelease: false
         fail_on_unmatched_files: false
