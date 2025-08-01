@@ -28,7 +28,7 @@
     "url": "https://github.com/rot1024/honyo/issues"
   },
   "homepage": "https://github.com/rot1024/honyo#readme",
-  "description": "",
+  "description": "Instant AI translation anywhere: select text and double-copy (C+C)",
   "devDependencies": {
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^24.1.0",
