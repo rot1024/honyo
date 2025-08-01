@@ -6,6 +6,14 @@ export function setupAutoUpdater(): void {
   // Configure auto-updater
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = true;
+  
+  // Enable detailed logging
+  autoUpdater.logger = console;
+  
+  // For macOS unsigned builds, allow downgrade (for testing)
+  if (process.platform === 'darwin') {
+    autoUpdater.allowDowngrade = true;
+  }
 
   // Check for updates on startup and every hour
   void autoUpdater.checkForUpdates();
@@ -38,7 +46,18 @@ export function setupAutoUpdater(): void {
       })
       .then(result => {
         if (result.response === 0) {
-          void autoUpdater.downloadUpdate();
+          console.log('User clicked Download, starting download...');
+          autoUpdater.downloadUpdate()
+            .then(() => {
+              console.log('Download started successfully');
+            })
+            .catch(error => {
+              console.error('Failed to start download:', error);
+              void dialog.showErrorBox(
+                'Download Error',
+                `Failed to download update: ${error.message || error}`,
+              );
+            });
         }
       });
   });
@@ -49,6 +68,11 @@ export function setupAutoUpdater(): void {
 
   autoUpdater.on('error', err => {
     console.error('Error in auto-updater:', err);
+    // Show error to user for debugging
+    void dialog.showErrorBox(
+      'Auto-updater Error',
+      `An error occurred while checking for updates:\n\n${err.message || err}\n\nThis might be due to unsigned builds on macOS.`,
+    );
   });
 
   autoUpdater.on('download-progress', progressObj => {

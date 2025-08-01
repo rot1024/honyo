@@ -7,3 +7,4 @@ build/
 *.log
 .eslintcache
 RELEASE_NOTES.md
+dev-app-update.yml
