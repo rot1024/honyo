@@ -10,8 +10,18 @@ import {
   type CustomModel,
 } from '../config/index.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Get __dirname in both ESM and CommonJS
+const getCurrentDir = (): string => {
+  if (typeof import.meta.url !== 'undefined') {
+    // ESM
+    return dirname(fileURLToPath(import.meta.url));
+  } else {
+    // CommonJS
+    return __dirname;
+  }
+};
+
+const currentDir = getCurrentDir();
 
 let settingsWindow: BrowserWindow | null = null;
 
@@ -34,7 +44,7 @@ export function openSettingsWindow(): void {
     title: 'Settings',
   });
 
-  const htmlPath = join(__dirname, '../../settings.html');
+  const htmlPath = join(currentDir, '../../settings.html');
   void settingsWindow.loadFile(htmlPath);
 
   settingsWindow.on('closed', () => {

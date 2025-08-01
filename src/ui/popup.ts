@@ -1,10 +1,20 @@
 import { BrowserWindow, screen, ipcMain, clipboard } from 'electron';
+import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
 import { cancelCurrentTranslation } from '../keyboard/handler.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Get __dirname in both ESM and CommonJS
+const getCurrentDir = (): string => {
+  if (typeof import.meta.url !== 'undefined') {
+    // ESM
+    return dirname(fileURLToPath(import.meta.url));
+  } else {
+    // CommonJS
+    return __dirname;
+  }
+};
+
+const currentDir = getCurrentDir();
 
 let popupWindow: BrowserWindow | null = null;
 
@@ -55,7 +65,7 @@ export function showTranslationPopup(translation: string | null, originalText: s
   repositionPopup(cursorPoint);
 
   // Load popup HTML
-  const htmlPath = join(__dirname, '../../popup.html');
+  const htmlPath = join(currentDir, '../../popup.html');
   void popupWindow.loadFile(htmlPath);
 
   // Send initial state once loaded

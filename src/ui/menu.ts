@@ -12,13 +12,23 @@ import { checkForUpdates } from '../app/updater.ts';
 import { cancelCurrentTranslation, isCurrentlyTranslating } from '../keyboard/handler.ts';
 import { closePopup } from './popup.ts';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Get __dirname in both ESM and CommonJS
+const getCurrentDir = (): string => {
+  if (typeof import.meta.url !== 'undefined') {
+    // ESM
+    return dirname(fileURLToPath(import.meta.url));
+  } else {
+    // CommonJS
+    return __dirname;
+  }
+};
+
+const currentDir = getCurrentDir();
 
 // Get version from package.json
 let appVersion = '';
 try {
-  const packageContent = readFileSync(join(__dirname, '../../package.json'), 'utf-8');
+  const packageContent = readFileSync(join(currentDir, '../../package.json'), 'utf-8');
   const packageJson = JSON.parse(packageContent) as { version?: string };
   appVersion = packageJson.version ?? '';
 } catch (error) {

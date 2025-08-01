@@ -3,8 +3,21 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// Get __dirname in both ESM and CommonJS
+// This dual compatibility is needed because:
+// - Development uses ESM (type: "module" in package.json)
+// - Production must use CommonJS due to @electron/universal limitations
+const getCurrentDir = (): string => {
+  if (typeof import.meta.url !== 'undefined') {
+    // ESM
+    return dirname(fileURLToPath(import.meta.url));
+  } else {
+    // CommonJS
+    return __dirname;
+  }
+};
+
+const currentDir = getCurrentDir();
 
 function getIconPath(filename: string): string {
   // In production, icons are in extraResources
@@ -12,7 +25,7 @@ function getIconPath(filename: string): string {
     return join(process.resourcesPath, 'icons', filename);
   }
   // In development, use the source files
-  return join(__dirname, filename);
+  return join(currentDir, filename);
 }
 
 export function createNormalIcon(): Electron.NativeImage {

@@ -6,10 +6,10 @@ export function setupAutoUpdater(): void {
   // Configure auto-updater
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = true;
-  
+
   // Enable detailed logging
   autoUpdater.logger = console;
-  
+
   // For macOS unsigned builds, allow downgrade (for testing)
   if (process.platform === 'darwin') {
     autoUpdater.allowDowngrade = true;
@@ -47,15 +47,17 @@ export function setupAutoUpdater(): void {
       .then(result => {
         if (result.response === 0) {
           console.log('User clicked Download, starting download...');
-          autoUpdater.downloadUpdate()
+          autoUpdater
+            .downloadUpdate()
             .then(() => {
               console.log('Download started successfully');
             })
-            .catch(error => {
+            .catch((error: unknown) => {
               console.error('Failed to start download:', error);
+              const errorMessage = error instanceof Error ? error.message : String(error);
               void dialog.showErrorBox(
                 'Download Error',
-                `Failed to download update: ${error.message || error}`,
+                `Failed to download update: ${errorMessage}`,
               );
             });
         }

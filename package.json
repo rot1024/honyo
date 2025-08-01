@@ -17,7 +17,9 @@
     "build": "node scripts/build.js",
     "build:icons": "node scripts/make-icons.mjs",
     "dist": "npm run build && electron-builder",
-    "dist:mac": "electron-builder --mac",
+    "dist:mac": "npm run build && npm run dist:mac:x64 && npm run dist:mac:arm64",
+    "dist:mac:x64": "electron-builder --mac --x64",
+    "dist:mac:arm64": "electron-builder --mac --arm64",
     "dist:win": "electron-builder --win",
     "dist:linux": "electron-builder --linux",
     "changelog": "conventional-changelog -p angular -o RELEASE_NOTES.md -r 1",
@@ -37,6 +39,7 @@
   "homepage": "https://github.com/rot1024/honyo#readme",
   "description": "Instant AI translation anywhere: select text and double-copy (C+C)",
   "devDependencies": {
+    "@electron/universal": "^3.0.1",
     "@resvg/resvg-js": "^2.6.2",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^24.1.0",
@@ -70,7 +73,7 @@
     "uiohook-napi": "^1.5.4",
     "zod": "^3.25.76"
   },
-  "build": {
+  "buildConfig": {
     "appId": "com.rot1024.honyo",
     "productName": "Honyo",
     "directories": {
@@ -110,17 +113,11 @@
       "target": [
         {
           "target": "dmg",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
+          "arch": "universal"
         },
         {
           "target": "zip",
-          "arch": [
-            "x64",
-            "arm64"
-          ]
+          "arch": "universal"
         }
       ]
     },

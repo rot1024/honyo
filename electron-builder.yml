@@ -1,0 +1,53 @@
+appId: com.rot1024.honyo
+productName: Honyo
+directories:
+  output: dist
+publish:
+  provider: github
+  owner: rot1024
+  repo: honyo
+files:
+  - build/**/*
+  - node_modules/**/*
+  - package.json
+  - "*.html"
+extraMetadata:
+  main: build/main.js
+  # IMPORTANT: @electron/universal limitation
+  # Must use 'commonjs' instead of 'module' because @electron/universal
+  # generates a CommonJS index.js file for the universal binary.
+  # This file uses require() and module.exports which are incompatible with ES modules.
+  # See: https://github.com/electron/universal/issues/79
+  type: commonjs
+asar: true
+asarUnpack:
+  - node_modules/uiohook-napi/**/*
+extraResources:
+  - from: src/ui/icon-normal.png
+    to: icons/icon-normal.png
+  - from: src/ui/icon-translating.png
+    to: icons/icon-translating.png
+
+mac:
+  category: public.app-category.utilities
+  icon: assets/icons/icon.icns
+  target:
+    - target: dmg
+    - target: zip
+  forceCodeSigning: false
+
+win:
+  target: nsis
+  icon: assets/icons/icon.ico
+
+linux:
+  icon: assets/icons
+  target:
+    - target: AppImage
+      arch:
+        - x64
+
+npmRebuild: true
+buildDependenciesFromSource: true
+nodeGypRebuild: false
+

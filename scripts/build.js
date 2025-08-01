@@ -48,7 +48,9 @@ try {
     entryPoints,
     bundle: false, // Keep individual files
     outdir: 'build',
-    format: 'esm',
+    // Must use CommonJS format for compatibility with @electron/universal
+    // which generates a CommonJS index.js file that cannot work with ES modules
+    format: 'cjs',
     platform: 'node',
     target: 'node18',
     sourcemap: true,
@@ -85,6 +87,8 @@ async function fixImports(dir) {
       // Fix imports with .ts extensions
       content = content.replace(/from\s+["'](.+?)\.ts["']/g, 'from "$1.js"');
       content = content.replace(/import\s*\(\s*["'](.+?)\.ts["']\s*\)/g, 'import("$1.js")');
+      // Fix require statements with .ts extensions (for CommonJS)
+      content = content.replace(/require\s*\(\s*["'](.+?)\.ts["']\s*\)/g, 'require("$1.js")');
       await writeFile(fullPath, content);
     }
   }
