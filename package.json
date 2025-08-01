@@ -64,6 +64,7 @@
     "directories": {
       "output": "dist"
     },
+    "publish": null,
     "files": [
       "build/**/*",
       "popup.html",
