@@ -6,21 +6,18 @@
   "scripts": {
     "start": "NODE_OPTIONS=\"--experimental-strip-types\" electron .",
     "typecheck": "tsc",
-    "lint": "eslint src/**/*.ts",
-    "lint:fix": "eslint src/**/*.ts --fix",
+    "lint": "eslint src/**/*.ts --cache",
+    "lint:fix": "eslint src/**/*.ts --fix --cache",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --check \"src/**/*.ts\"",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/rot1024/honyo.git"
-  },
+  "repository": "https://github.com/rot1024/honyo.git",
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "rot1024 <aayhrot@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/rot1024/honyo/issues"
   },
