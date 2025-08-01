@@ -1,6 +1,8 @@
 # Honyo - AI-Powered Translation Tool
 
-A desktop application that provides instant AI-powered translation with a simple double Ctrl/Cmd+C shortcut, similar to DeepL.
+A desktop application that provides instant AI-powered translation with a simple double Ctrl/Cmd+C shortcut, similar to DeepL. (status: alpha)
+
+![Honyo screenshot](honyo.png)
 
 ## Features
 
