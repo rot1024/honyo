@@ -55,6 +55,7 @@
     "@ai-sdk/openai": "^2.0.0",
     "ai": "^5.0.0",
     "dotenv": "^17.2.1",
+    "electron-updater": "^6.6.2",
     "uiohook-napi": "^1.5.4",
     "zod": "^3.25.76"
   },
@@ -64,7 +65,11 @@
     "directories": {
       "output": "dist"
     },
-    "publish": null,
+    "publish": {
+      "provider": "github",
+      "owner": "rot1024",
+      "repo": "honyo"
+    },
     "files": [
       "build/**/*",
       "popup.html",
@@ -84,11 +89,17 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         },
         {
           "target": "zip",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ]
     },
@@ -100,7 +111,9 @@
       "target": [
         {
           "target": "AppImage",
-          "arch": ["x64"]
+          "arch": [
+            "x64"
+          ]
         }
       ]
     }

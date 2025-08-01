@@ -9,6 +9,7 @@ import {
   checkAccessibilityPermission,
 } from './app/index.ts';
 import { setupPopupIPC } from './ui/popup.ts';
+import { setupAutoUpdater } from './app/updater.ts';
 
 // Initialize the app
 function initialize(): void {
@@ -37,6 +38,9 @@ function initialize(): void {
 
     // Initialize configuration
     initializeConfig();
+
+    // Setup auto-updater
+    setupAutoUpdater();
 
     // Create tray icon
     createTray();

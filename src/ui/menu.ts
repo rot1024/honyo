@@ -8,6 +8,7 @@ import { languages } from '../language/index.ts';
 import { AI_MODELS } from '../models.ts';
 import { getConfig, updateConfig, getPausedState, setPausedState } from '../config/index.ts';
 import { openSettingsWindow } from './settings.ts';
+import { checkForUpdates } from '../app/updater.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -128,6 +129,12 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       },
     },
     { type: 'separator' },
+    {
+      label: 'Check for Updates...',
+      click: (): void => {
+        checkForUpdates();
+      },
+    },
     {
       label: 'Quit',
       click: (): void => {
