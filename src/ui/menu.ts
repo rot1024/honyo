@@ -9,6 +9,8 @@ import { AI_MODELS, CUSTOM_MODEL_ID } from '../models.ts';
 import { getConfig, updateConfig, getPausedState, setPausedState } from '../config/index.ts';
 import { openSettingsWindow } from './settings.ts';
 import { checkForUpdates } from '../app/updater.ts';
+import { cancelCurrentTranslation, isCurrentlyTranslating } from '../keyboard/handler.ts';
+import { closePopup } from './popup.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -146,6 +148,15 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
       click: (): void => {
         setPausedState(!isPaused);
         console.log(`Translation ${getPausedState() ? 'paused' : 'resumed'}`);
+        tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+      },
+    },
+    {
+      label: 'Stop Current Translation',
+      enabled: isCurrentlyTranslating(),
+      click: (): void => {
+        cancelCurrentTranslation();
+        closePopup();
         tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
       },
     },

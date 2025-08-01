@@ -75,10 +75,9 @@
     },
     "files": [
       "build/**/*",
-      "popup.html",
-      "settings.html",
       "node_modules/**/*",
-      "package.json"
+      "package.json",
+      "*.html"
     ],
     "extraMetadata": {
       "main": "build/main.js"

@@ -3,11 +3,12 @@ import { uIOhook, UiohookKey } from 'uiohook-napi';
 import { translateText } from '../translation/index.ts';
 import { getConfig, getPausedState } from '../config/index.ts';
 import { setTrayIcon } from '../ui/tray.ts';
-import { showTranslationPopup } from '../ui/popup.ts';
+import { showTranslationPopup, closePopup } from '../ui/popup.ts';
 
 let isTranslating = false;
 let t = 0;
 let n = 0;
+let currentAbortController: AbortController | null = null;
 
 export function setupKeyboardHandler(): void {
   uIOhook.on('keydown', e => {
@@ -29,15 +30,18 @@ export function setupKeyboardHandler(): void {
         return;
       }
 
-      // Ignore if translating
+      // Cancel current translation if in progress
       if (isTranslating) {
-        console.log('Translation already in progress, ignoring...');
-        n = 0;
-        return;
+        console.log('Translation already in progress, cancelling and starting new one...');
+        cancelCurrentTranslation();
+        // Don't return - continue with new translation
       }
 
       setTimeout(() => {
         void (async (): Promise<void> => {
+          // Create new AbortController for this translation
+          const abortController = new AbortController();
+
           // Wait for copy to complete
           try {
             const text = clipboard.readText();
@@ -53,6 +57,10 @@ export function setupKeyboardHandler(): void {
 
             const config = getConfig();
 
+            // Set current abort controller
+            currentAbortController = abortController;
+            const signal = abortController.signal;
+
             // Show popup immediately with loading state if in popup mode
             if (config.displayMode === 'popup') {
               showTranslationPopup(null, text);
@@ -62,6 +70,7 @@ export function setupKeyboardHandler(): void {
               text,
               config.targetLanguage,
               config.secondaryLanguage,
+              signal,
             );
 
             // Handle display mode
@@ -78,14 +87,28 @@ export function setupKeyboardHandler(): void {
             }
           } catch (error) {
             console.error('Error in translation process:', error);
-            new Notification({
-              title: 'Translation Error',
-              body: 'Failed to translate. Check console for details.',
-            }).show();
+            // Check if error is due to abortion
+            if (error instanceof Error && error.name === 'AbortError') {
+              console.log('Translation was cancelled');
+              // Don't show error notification for cancelled translations
+              // Also close popup if it's open
+              const currentConfig = getConfig();
+              if (currentConfig.displayMode === 'popup') {
+                closePopup();
+              }
+            } else {
+              new Notification({
+                title: 'Translation Error',
+                body: 'Failed to translate. Check console for details.',
+              }).show();
+            }
           } finally {
-            // Translation complete
-            isTranslating = false;
-            setTrayIcon(false);
+            // Translation complete - only reset state if this is still the current translation
+            if (currentAbortController?.signal === abortController.signal) {
+              isTranslating = false;
+              setTrayIcon(false);
+              currentAbortController = null;
+            }
           }
         })();
       }, 60);
@@ -110,4 +133,19 @@ export function stopKeyboardListener(): void {
   } catch (error) {
     console.error('Error stopping uIOhook:', error);
   }
+}
+
+export function cancelCurrentTranslation(): void {
+  if (currentAbortController) {
+    currentAbortController.abort();
+    console.log('Translation cancelled');
+    // Reset state immediately to allow new translations
+    isTranslating = false;
+    setTrayIcon(false);
+    currentAbortController = null;
+  }
+}
+
+export function isCurrentlyTranslating(): boolean {
+  return isTranslating;
 }

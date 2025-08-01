@@ -9,6 +9,7 @@ export async function translateText(
   text: string,
   primaryLanguage: string,
   secondaryLanguage: string,
+  signal?: AbortSignal,
 ): Promise<string> {
   const config = getConfig();
   const apiKeys = getApiKeys();
@@ -52,7 +53,7 @@ export async function translateText(
     const model = getAIProvider(config.aiModel, apiKeys, config.customModel);
 
     // Detect language
-    const detectedLanguage = await detectLanguage(text, model);
+    const detectedLanguage = await detectLanguage(text, model, signal, config.customLanguages);
     if (!detectedLanguage) {
       return 'Could not detect language';
     }
@@ -78,13 +79,23 @@ export async function translateText(
       ? `\n\nAdditional instructions:\n${config.customPrompt}\n`
       : '';
 
-    const { text: translation } = await generateText({
-      model,
-      prompt: `You are a translator. Translate the following text to ${targetLanguage}.
+    const prompt = `You are a translator. Translate the following text to ${targetLanguage}.
 IMPORTANT: Return ONLY the translated text. Do not include any explanations, notes, or phrases like "Here is the translation" or "The translation is". Just the translated text itself.${customPromptSection}
 
-Text to translate: ${text}`,
-    });
+Text to translate: ${text}`;
+
+    const { text: translation } = await generateText(
+      signal
+        ? {
+            model,
+            prompt,
+            abortSignal: signal,
+          }
+        : {
+            model,
+            prompt,
+          },
+    );
     console.log('Translation complete:', translation.slice(0, 50) + '...');
     return translation.trim();
   } catch (error) {

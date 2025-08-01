@@ -1,6 +1,7 @@
 import { BrowserWindow, screen, ipcMain, clipboard } from 'electron';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { cancelCurrentTranslation } from '../keyboard/handler.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -54,7 +55,8 @@ export function showTranslationPopup(translation: string | null, originalText: s
   repositionPopup(cursorPoint);
 
   // Load popup HTML
-  void popupWindow.loadFile(join(__dirname, '../../popup.html'));
+  const htmlPath = join(__dirname, '../../popup.html');
+  void popupWindow.loadFile(htmlPath);
 
   // Send initial state once loaded
   popupWindow.webContents.once('did-finish-load', () => {
@@ -85,6 +87,8 @@ export function setupPopupIPC(): void {
   });
 
   ipcMain.on('close-popup', () => {
+    // Cancel any ongoing translation when closing popup
+    cancelCurrentTranslation();
     if (popupWindow && !popupWindow.isDestroyed()) {
       popupWindow.close();
     }

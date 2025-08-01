@@ -1,4 +1,6 @@
 import { BrowserWindow, ipcMain } from 'electron';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import {
   getApiKeys,
   updateApiKeys,
@@ -7,6 +9,9 @@ import {
   type ApiKeys,
   type CustomModel,
 } from '../config/index.ts';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 let settingsWindow: BrowserWindow | null = null;
 
@@ -29,7 +34,8 @@ export function openSettingsWindow(): void {
     title: 'Settings',
   });
 
-  void settingsWindow.loadFile('settings.html');
+  const htmlPath = join(__dirname, '../../settings.html');
+  void settingsWindow.loadFile(htmlPath);
 
   settingsWindow.on('closed', () => {
     settingsWindow = null;
