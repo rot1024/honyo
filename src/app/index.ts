@@ -4,3 +4,4 @@ export {
   setupShutdownHandlers,
   cleanupAndExit,
 } from './lifecycle.ts';
+export { checkAccessibilityPermission } from './accessibility.ts';

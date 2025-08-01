@@ -29,7 +29,6 @@
   "homepage": "https://github.com/rot1024/honyo#readme",
   "description": "",
   "devDependencies": {
-    "@types/electron": "^1.4.38",
     "@types/eslint__js": "^8.42.3",
     "@types/node": "^24.1.0",
     "@typescript-eslint/eslint-plugin": "^8.38.0",

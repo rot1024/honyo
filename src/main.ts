@@ -2,7 +2,12 @@ import { app } from 'electron';
 import { initializeConfig } from './config/index.ts';
 import { createTray, setupSettingsIPC } from './ui/index.ts';
 import { setupKeyboardHandler, startKeyboardListener } from './keyboard/index.ts';
-import { setupSingleInstance, setupPlatformSpecific, setupShutdownHandlers } from './app/index.ts';
+import {
+  setupSingleInstance,
+  setupPlatformSpecific,
+  setupShutdownHandlers,
+  checkAccessibilityPermission,
+} from './app/index.ts';
 import { setupPopupIPC } from './ui/popup.ts';
 
 // Initialize the app
@@ -20,9 +25,15 @@ function initialize(): void {
   setupShutdownHandlers();
 
   // When app is ready
-  void app.whenReady().then(() => {
+  void app.whenReady().then(async () => {
     console.log('App ready, starting key listener...');
     console.log('API Key present:', !!process.env.ANTHROPIC_API_KEY);
+
+    // Check accessibility permission on macOS
+    const hasPermission = await checkAccessibilityPermission();
+    if (!hasPermission) {
+      return; // App will quit
+    }
 
     // Initialize configuration
     initializeConfig();
