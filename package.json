@@ -1,0 +1,32 @@
+{
+  "name": "honyo",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/rot1024/honyo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rot1024/honyo/issues"
+  },
+  "homepage": "https://github.com/rot1024/honyo#readme",
+  "description": "",
+  "devDependencies": {
+    "electron": "^37.2.5"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^2.0.0",
+    "@ai-sdk/google": "^2.0.0",
+    "@ai-sdk/openai": "^2.0.0",
+    "ai": "^5.0.0",
+    "dotenv": "^17.2.1",
+    "uiohook-napi": "^1.5.4"
+  }
+}
