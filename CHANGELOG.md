@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.4.0](https://github.com/rot1024/honyo/compare/v0.3.4...v0.4.0) (2025-08-04)
+
+
+### Features
+
+* add display settings with auto-close option for translation popup ([#1](https://github.com/rot1024/honyo/issues/1)) ([c26e78f](https://github.com/rot1024/honyo/commit/c26e78f8ace5a6ab5ba1675d8098e6b4b30f5001))
+
+
+### Bug Fixes
+
+* correct formatting of font-family in settings.html ([#2](https://github.com/rot1024/honyo/issues/2)) ([bd8d68a](https://github.com/rot1024/honyo/commit/bd8d68a16cfb494f02ffa56c1d2f73cac849ef42))
+* update tray icon ([5037614](https://github.com/rot1024/honyo/commit/50376149f60a8c14a1bce883b77d9458fe65475f))
+
 ### [0.3.4](https://github.com/rot1024/honyo/compare/v0.3.3...v0.3.4) (2025-08-04)
 
 
