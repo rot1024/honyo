@@ -91,4 +91,14 @@ export function setupSettingsIPC(): void {
     updateConfig({ customLanguages });
     event.reply('custom-languages-saved', true);
   });
+
+  ipcMain.on('load-auto-close-on-blur', event => {
+    const config = getConfig();
+    event.reply('auto-close-on-blur-loaded', config.autoCloseOnBlur ?? false);
+  });
+
+  ipcMain.on('save-auto-close-on-blur', (event, autoCloseOnBlur: boolean) => {
+    updateConfig({ autoCloseOnBlur });
+    event.reply('auto-close-on-blur-saved', true);
+  });
 }

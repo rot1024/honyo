@@ -42,6 +42,7 @@ function getDefaultConfig(): Config {
     secondaryLanguage: secondaryLang,
     isPaused: false,
     aiModel: DEFAULT_AI_MODEL,
+    autoCloseOnBlur: false,
     customPrompt: '',
     displayMode: 'notification',
   };
@@ -72,6 +73,11 @@ export function initializeConfig(): void {
   // Initialize display mode if not present
   if (config.displayMode === undefined) {
     config.displayMode = 'notification';
+  }
+
+  // Initialize autoCloseOnBlur if not present
+  if (config.autoCloseOnBlur === undefined) {
+    config.autoCloseOnBlur = false;
   }
 
   // Restore isPaused state
