@@ -138,6 +138,14 @@ Add languages not included in the default list:
 3. Click "Save"
 4. Your custom languages will appear in the Primary/Secondary language menus
 
+### Popup Window Settings
+
+Configure popup window behavior:
+
+1. Open Settings → "Display" tab
+2. **Auto-close on blur**: Enable this option to automatically close the popup window when it loses focus
+3. Click "Save"
+
 ## Usage
 
 1. Select any text in any application
