@@ -2,6 +2,7 @@ import { BrowserWindow, screen, ipcMain, clipboard } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { cancelCurrentTranslation } from '../keyboard/handler.ts';
+import { getConfig } from '../config/index.ts';
 
 // Get __dirname in both ESM and CommonJS
 const getCurrentDir = (): string => {
@@ -80,8 +81,15 @@ export function showTranslationPopup(translation: string | null, originalText: s
     }
   });
 
-  // Remove blur event handler to prevent closing on click outside
-  // Users should use the close button or copy button to close the window
+  // Add blur event handler based on user preference
+  const config = getConfig();
+  if (config.autoCloseOnBlur) {
+    popupWindow.on('blur', () => {
+      if (popupWindow && !popupWindow.isDestroyed()) {
+        popupWindow.close();
+      }
+    });
+  }
 
   popupWindow.on('closed', () => {
     popupWindow = null;

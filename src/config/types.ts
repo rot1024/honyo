@@ -16,6 +16,7 @@ export interface Config {
   secondaryLanguage: string;
   isPaused: boolean;
   aiModel: string;
+  autoCloseOnBlur?: boolean;
   customPrompt: string;
   displayMode: DisplayMode;
   customModel?: CustomModel;
