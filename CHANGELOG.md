@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.4](https://github.com/rot1024/honyo/compare/v0.3.3...v0.3.4) (2025-08-04)
+
+
+### Bug Fixes
+
+* app closes when all windows closed in windows ([661838e](https://github.com/rot1024/honyo/commit/661838e2a02d8f80f4906154423b55cbe8e7a411))
+
+
+### Documentation
+
+* add installation to readme ([e4b0de0](https://github.com/rot1024/honyo/commit/e4b0de0de2e76d1203109cf95971b0f634b73973))
+* update readme ([71fa90b](https://github.com/rot1024/honyo/commit/71fa90ba44b5884954e70a6c6703188cda9f8ef3))
+
 ### [0.3.3](https://github.com/rot1024/honyo/compare/v0.3.2...v0.3.3) (2025-08-01)
 
 ### [0.3.2](https://github.com/rot1024/honyo/compare/v0.3.1...v0.3.2) (2025-08-01)
