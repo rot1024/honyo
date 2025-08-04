@@ -48,9 +48,8 @@ export function cleanupAndExit(): void {
 export function setupShutdownHandlers(): void {
   // Electron app shutdown handling
   app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-      cleanupAndExit();
-    }
+    // Don't quit the app when all windows are closed
+    // The app should keep running in the system tray
   });
 
   // Cleanup before app quit
