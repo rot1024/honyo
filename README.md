@@ -20,15 +20,41 @@
 
 ## Installation
 
+### Download
+
+Download the latest version from [GitHub Releases](https://github.com/rot1024/honyo/releases).
+
+#### Which file to download?
+
+**Windows:**
+- `Honyo-{version}.exe` - Windows installer (recommended)
+- `Honyo-{version}-win.zip` - Portable version (no installation required)
+
+**macOS:**
+- **Apple Silicon (M1/M2/M3 Macs):**
+  - `Honyo-{version}-arm64.dmg` - DMG installer (recommended)
+  - `Honyo-{version}-arm64-mac.zip` - ZIP archive
+- **Intel Macs:**
+  - `Honyo-{version}.dmg` - DMG installer (recommended)
+  - `Honyo-{version}-mac.zip` - ZIP archive
+
+**Linux:**
+- `Honyo-{version}.AppImage` - Universal Linux package (recommended)
+- `Honyo-{version}.deb` - Debian/Ubuntu package
+- `Honyo-{version}.rpm` - Red Hat/Fedora package
+- `Honyo-{version}.tar.gz` - Generic Linux archive
+
 ### macOS
 
-1. Download the appropriate version for your Mac:
-   - **Apple Silicon (M1/M2/M3)**: Download `Honyo-*-arm64.dmg` or `Honyo-*-arm64-mac.zip`
-   - **Intel Mac**: Download `Honyo-*.dmg` or `Honyo-*-mac.zip`
+1. Download the appropriate version for your Mac from the downloads section above
 
 2. **For DMG files**:
    - Open the DMG file
    - Drag Honyo.app to your Applications folder
+   - Remove the quarantine attribute:
+     ```bash
+     xattr -cr /Applications/Honyo.app
+     ```
    - **First launch**: Right-click (or Control-click) on Honyo.app and select "Open"
    - Click "Open" in the security dialog
 
