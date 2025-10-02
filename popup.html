@@ -248,10 +248,12 @@
         ipcRenderer.send('close-popup');
       }
 
-      // Close popup on Escape key
+      // Handle keyboard shortcuts
       document.addEventListener('keydown', e => {
         if (e.key === 'Escape') {
           closePopup();
+        } else if (e.key === 'Enter') {
+          copyTranslation();
         }
       });
     </script>

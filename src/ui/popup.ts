@@ -1,6 +1,7 @@
 import { BrowserWindow, screen, ipcMain, clipboard } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { exec } from 'child_process';
 import { cancelCurrentTranslation } from '../keyboard/handler.ts';
 import { getConfig } from '../config/index.ts';
 
@@ -18,10 +19,45 @@ const getCurrentDir = (): string => {
 const currentDir = getCurrentDir();
 
 let popupWindow: BrowserWindow | null = null;
+let previousActiveApp: string | null = null;
+
+// Function to get the currently active application
+function capturePreviousApp(): void {
+  if (process.platform === 'darwin') {
+    exec(
+      'osascript -e \'tell application "System Events" to get name of first application process whose frontmost is true\'',
+      (error, stdout) => {
+        if (!error && stdout) {
+          previousActiveApp = stdout.trim();
+          console.log('Captured previous app:', previousActiveApp);
+        }
+      },
+    );
+  }
+}
+
+// Function to restore focus to the previous application
+function restorePreviousApp(): void {
+  if (process.platform === 'darwin' && previousActiveApp && previousActiveApp !== 'Electron') {
+    exec(`osascript -e 'tell application "${previousActiveApp}" to activate'`, error => {
+      if (error) {
+        console.error('Failed to restore previous app:', error);
+      } else {
+        console.log('Restored focus to:', previousActiveApp);
+      }
+    });
+    previousActiveApp = null;
+  }
+}
 
 export function showTranslationPopup(translation: string | null, originalText: string): void {
   // Get cursor position with DPI scaling consideration
   const cursorPoint = screen.getCursorScreenPoint();
+
+  // Capture the previously active app before showing the popup
+  if (!popupWindow || popupWindow.isDestroyed()) {
+    capturePreviousApp();
+  }
 
   // If popup exists, update content without repositioning
   if (popupWindow && !popupWindow.isDestroyed()) {
@@ -92,6 +128,8 @@ export function showTranslationPopup(translation: string | null, originalText: s
   }
 
   popupWindow.on('closed', () => {
+    // Restore focus to the previous application when popup closes
+    restorePreviousApp();
     popupWindow = null;
   });
 }
