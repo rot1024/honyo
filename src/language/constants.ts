@@ -1,7 +1,7 @@
 // Language code to name mapping
 export const LANGUAGES: Record<string, string> = {
-  ja: 'Japanese',
   en: 'English',
+  ja: 'Japanese',
   'zh-CN': 'Chinese (Simplified)',
   'zh-TW': 'Chinese (Traditional)',
   ko: 'Korean',
