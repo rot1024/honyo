@@ -134,6 +134,18 @@ export function showTranslationPopup(translation: string | null, originalText: s
   });
 }
 
+export function updatePopupTranslation(text: string): void {
+  if (popupWindow && !popupWindow.isDestroyed()) {
+    popupWindow.webContents.send('translation-chunk', text);
+  }
+}
+
+export function finalizePopupTranslation(text: string): void {
+  if (popupWindow && !popupWindow.isDestroyed()) {
+    popupWindow.webContents.send('translation-complete', text);
+  }
+}
+
 export function setupPopupIPC(): void {
   ipcMain.on('copy-translation', (event, text: string) => {
     clipboard.writeText(text);

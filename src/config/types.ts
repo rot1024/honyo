@@ -22,6 +22,7 @@ export interface Config {
   customModel?: CustomModel;
   customLanguages?: string[];
   skippedUpdateVersion?: string;
+  enableStreaming?: boolean;
 }
 
 export interface SavedConfig extends Config {

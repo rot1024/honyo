@@ -1,9 +1,14 @@
 import { clipboard, Notification } from 'electron';
 import { uIOhook, UiohookKey } from 'uiohook-napi';
-import { translateText } from '../translation/index.ts';
+import { translateText, translateTextStreaming } from '../translation/index.ts';
 import { getConfig, getPausedState } from '../config/index.ts';
 import { setTrayIcon } from '../ui/tray.ts';
-import { showTranslationPopup, closePopup } from '../ui/popup.ts';
+import {
+  showTranslationPopup,
+  closePopup,
+  updatePopupTranslation,
+  finalizePopupTranslation,
+} from '../ui/popup.ts';
 
 let isTranslating = false;
 let t = 0;
@@ -66,17 +71,36 @@ export function setupKeyboardHandler(): void {
               showTranslationPopup(null, text);
             }
 
-            const translation = await translateText(
-              text,
-              config.targetLanguage,
-              config.secondaryLanguage,
-              signal,
-            );
+            let translation: string;
+
+            // Use streaming for popup mode if enabled
+            if (config.displayMode === 'popup' && config.enableStreaming) {
+              translation = await translateTextStreaming(
+                text,
+                config.targetLanguage,
+                config.secondaryLanguage,
+                (chunk: string) => {
+                  updatePopupTranslation(chunk);
+                },
+                signal,
+              );
+              // Notify that streaming is complete
+              finalizePopupTranslation(translation);
+            } else {
+              translation = await translateText(
+                text,
+                config.targetLanguage,
+                config.secondaryLanguage,
+                signal,
+              );
+            }
 
             // Handle display mode
             if (config.displayMode === 'popup') {
-              // Update popup window with translation
-              showTranslationPopup(translation, text);
+              // Update popup window with final translation (in case streaming didn't run)
+              if (!config.enableStreaming) {
+                showTranslationPopup(translation, text);
+              }
             } else {
               // Notification mode: copy to clipboard and show notification
               clipboard.writeText(translation);

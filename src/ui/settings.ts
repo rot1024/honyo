@@ -95,10 +95,22 @@ export function setupSettingsIPC(): void {
   ipcMain.on('load-auto-close-on-blur', event => {
     const config = getConfig();
     event.reply('auto-close-on-blur-loaded', config.autoCloseOnBlur ?? false);
+    event.reply('enable-streaming-loaded', config.enableStreaming ?? false);
   });
 
   ipcMain.on('save-auto-close-on-blur', (event, autoCloseOnBlur: boolean) => {
     updateConfig({ autoCloseOnBlur });
     event.reply('auto-close-on-blur-saved', true);
   });
+
+  ipcMain.on(
+    'save-display-settings',
+    (event, settings: { autoCloseOnBlur: boolean; enableStreaming: boolean }) => {
+      updateConfig({
+        autoCloseOnBlur: settings.autoCloseOnBlur,
+        enableStreaming: settings.enableStreaming,
+      });
+      event.reply('display-settings-saved', true);
+    },
+  );
 }

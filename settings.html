@@ -325,6 +325,17 @@ Ancient Greek"
             it.
           </div>
 
+          <div class="checkbox-group" style="margin-top: 20px">
+            <input type="checkbox" id="enable-streaming" />
+            <label for="enable-streaming" class="checkbox-label">
+              Enable streaming for popup translations
+            </label>
+          </div>
+          <div class="help-text" style="margin-top: -15px; margin-left: 28px">
+            When enabled, translation text will appear progressively as the AI generates it (popup
+            mode only).
+          </div>
+
           <div class="status" id="display-status"></div>
         </div>
       </div>
@@ -382,6 +393,9 @@ Ancient Greek"
           .addEventListener('input', () => (pendingChanges.customLanguages = true));
         document
           .getElementById('auto-close-on-blur')
+          .addEventListener('change', () => (pendingChanges.display = true));
+        document
+          .getElementById('enable-streaming')
           .addEventListener('change', () => (pendingChanges.display = true));
       });
 
@@ -485,12 +499,17 @@ Ancient Greek"
         document.getElementById('auto-close-on-blur').checked = autoCloseOnBlur;
       });
 
+      ipcRenderer.on('enable-streaming-loaded', (event, enableStreaming) => {
+        document.getElementById('enable-streaming').checked = enableStreaming;
+      });
+
       function saveDisplaySettings() {
         const autoCloseOnBlur = document.getElementById('auto-close-on-blur').checked;
-        ipcRenderer.send('save-auto-close-on-blur', autoCloseOnBlur);
+        const enableStreaming = document.getElementById('enable-streaming').checked;
+        ipcRenderer.send('save-display-settings', { autoCloseOnBlur, enableStreaming });
       }
 
-      ipcRenderer.on('auto-close-on-blur-saved', (event, success) => {
+      ipcRenderer.on('display-settings-saved', (event, success) => {
         if (success) {
           pendingChanges.display = false;
           showStatus('Display settings saved successfully!', false);

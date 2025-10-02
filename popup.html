@@ -238,6 +238,22 @@
         document.querySelector('.copy-btn').disabled = false;
       });
 
+      // Receive streaming chunks (keep button disabled during streaming)
+      ipcRenderer.on('translation-chunk', (event, text) => {
+        currentTranslation = text;
+        document.getElementById('spinner-container').classList.remove('active');
+        document.getElementById('translation-text').style.display = 'block';
+        document.getElementById('translation-text').textContent = text;
+        // Keep button disabled until streaming completes
+      });
+
+      // Receive streaming completion
+      ipcRenderer.on('translation-complete', (event, text) => {
+        currentTranslation = text;
+        document.getElementById('translation-text').textContent = text;
+        document.querySelector('.copy-btn').disabled = false;
+      });
+
       function copyTranslation() {
         if (currentTranslation) {
           ipcRenderer.send('copy-translation', currentTranslation);
