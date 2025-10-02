@@ -20,7 +20,7 @@ export function createTray(): Tray {
   // Create menu update function
   const updateMenu = (): void => {
     if (tray) {
-      const menu = createTrayMenu(tray, () => {});
+      const menu = createTrayMenu(tray, updateMenu);
       tray.setContextMenu(menu);
     }
   };

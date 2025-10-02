@@ -152,6 +152,7 @@ export function setupAutoUpdater(): void {
           // Clear skipped version when user chooses to download
           clearSkippedUpdateVersion();
           isDownloading = true;
+          menuUpdateCallback?.();
           autoUpdater
             .downloadUpdate()
             .then(() => {
@@ -160,6 +161,7 @@ export function setupAutoUpdater(): void {
             .catch(async (error: unknown) => {
               console.error('Failed to start download:', error);
               isDownloading = false;
+              menuUpdateCallback?.();
 
               // Open GitHub Releases instead of showing error dialog
               if (GITHUB_RELEASES_URL) {
