@@ -70,7 +70,8 @@ export async function translateText(
 Rules:
 1. If the text is in ${primaryLanguage}, translate it to ${secondaryLanguage}
 2. If the text is in any other language (including ${secondaryLanguage}), translate it to ${primaryLanguage}
-3. Return ONLY the translated text. Do not include any explanations, notes, or phrases like "Here is the translation" or "The translation is". Just the translated text itself.
+3. If multiple languages are mixed in the text, determine the language with the highest word count ratio and use that as the source language
+4. Return ONLY the translated text. Do not include any explanations, notes, or phrases like "Here is the translation" or "The translation is". Just the translated text itself.
 
 Available languages to detect from: ${allLanguages.join(', ')}${customPromptSection}`;
 
