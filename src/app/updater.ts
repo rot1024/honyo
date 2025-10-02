@@ -10,6 +10,7 @@ let isCheckingForUpdate = false;
 let menuUpdateCallback: (() => void) | null = null;
 let isDownloading = false;
 let isManualCheck = false;
+let downloadProgress = 0;
 
 // Get __dirname in both ESM and CommonJS
 const getCurrentDir = (): string => {
@@ -62,6 +63,14 @@ export function setMenuUpdateCallback(callback: () => void): void {
 
 export function isCheckingUpdate(): boolean {
   return isCheckingForUpdate;
+}
+
+export function getDownloadProgress(): number {
+  return downloadProgress;
+}
+
+export function isDownloadingUpdate(): boolean {
+  return isDownloading;
 }
 
 export function setupAutoUpdater(): void {
@@ -255,6 +264,9 @@ export function setupAutoUpdater(): void {
     const logMessage = `Download speed: ${progressObj.bytesPerSecond} - Downloaded ${progressObj.percent}% (${progressObj.transferred}/${progressObj.total})`;
     console.log(logMessage);
 
+    downloadProgress = Math.round(progressObj.percent);
+    menuUpdateCallback?.();
+
     // Optionally show progress in UI
     const windows = BrowserWindow.getAllWindows();
     windows.forEach(window => {
@@ -265,6 +277,8 @@ export function setupAutoUpdater(): void {
   autoUpdater.on('update-downloaded', info => {
     console.log('Update downloaded:', info);
     isDownloading = false;
+    downloadProgress = 0;
+    menuUpdateCallback?.();
 
     // Reset progress bar
     const windows = BrowserWindow.getAllWindows();

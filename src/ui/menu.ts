@@ -8,7 +8,12 @@ import { languages } from '../language/index.ts';
 import { AI_MODELS, CUSTOM_MODEL_ID } from '../models.ts';
 import { getConfig, updateConfig, getPausedState, setPausedState } from '../config/index.ts';
 import { openSettingsWindow } from './settings.ts';
-import { checkForUpdates, isCheckingUpdate } from '../app/updater.ts';
+import {
+  checkForUpdates,
+  isCheckingUpdate,
+  isDownloadingUpdate,
+  getDownloadProgress,
+} from '../app/updater.ts';
 import { cancelCurrentTranslation, isCurrentlyTranslating } from '../keyboard/handler.ts';
 import { closePopup } from './popup.ts';
 
@@ -172,8 +177,12 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
     },
     { type: 'separator' },
     {
-      label: isCheckingUpdate() ? 'Checking for Updates...' : 'Check for Updates...',
-      enabled: !isCheckingUpdate(),
+      label: isDownloadingUpdate()
+        ? `Downloading Update (${getDownloadProgress()}%)...`
+        : isCheckingUpdate()
+          ? 'Checking for Updates...'
+          : 'Check for Updates...',
+      enabled: !isCheckingUpdate() && !isDownloadingUpdate(),
       click: (): void => {
         checkForUpdates();
       },
