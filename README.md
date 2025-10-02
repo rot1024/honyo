@@ -11,12 +11,12 @@
 
 ## Features
 
-- ⚡ **Instant Translation** - Double Ctrl+C to translate any selected text
-- 🌍 **Multi-Language** - 15+ built-in languages plus custom language support
-- 🤖 **AI Models** - Latest models from Claude, GPT-4, Gemini, or use your own
-- 🔄 **Smart Detection** - Auto-detects language and switches translation direction
-- 💻 **Lightweight** - Lives in your system tray with minimal resource usage
-- 🎯 **Customizable** - Add your own translation rules, languages, and models
+- ⚡ **Instant Translation** - Double Ctrl/Cmd+C to translate any selected text
+- 🌍 **Multi-Language Support** - 26 built-in languages plus custom language support
+- 🤖 **Multiple AI Models** - Support for Claude, GPT, Gemini, and custom models
+- 💬 **Two Display Modes** - Notification with auto-copy or interactive popup window
+- 🎨 **Customizable** - Custom instructions, languages, and translation rules
+- 🪶 **Lightweight** - Minimal resource usage, lives in your system tray
 
 ## Installation
 
@@ -103,6 +103,9 @@ You can change these settings from the system tray menu:
 1. Click on "Primary: [Language]" to select your primary translation target
 2. Click on "Secondary: [Language]" to select your fallback language
 
+**Supported Languages (26):**
+English, Japanese, Chinese (Simplified), Chinese (Traditional), Korean, Spanish, French, German, Italian, Portuguese, Russian, Arabic, Hindi, Thai, Vietnamese, Indonesian, Malay, Filipino, Dutch, Polish, Turkish, Ukrainian, Swedish, Danish, Norwegian, Finnish
+
 ### Custom Instructions
 
 You can add custom instructions that will be included in all translations:
@@ -138,37 +141,68 @@ Add languages not included in the default list:
 3. Click "Save"
 4. Your custom languages will appear in the Primary/Secondary language menus
 
-### Popup Window Settings
+### Display Settings
 
-Configure popup window behavior:
+Configure popup window and translation display behavior:
 
 1. Open Settings → "Display" tab
 2. **Auto-close on blur**: Enable this option to automatically close the popup window when it loses focus
-3. Click "Save"
+3. **Enable streaming**: Enable this option to see translations appear progressively as the AI generates them (popup mode only)
+4. Click "Save"
+
+**Display Modes:**
+- **Notification & Copy**: Translation result appears as a system notification and is automatically copied to clipboard
+- **Popup Window**: Translation result appears in a floating window with additional features:
+  - Real-time streaming (when enabled)
+  - Copy button and keyboard shortcuts (Enter to copy, Escape to close)
+  - Right-click context menu for copying selected text or all text
+  - Auto-return focus to previous application when closed
 
 ## Usage
 
 1. Select any text in any application
 2. Press Ctrl+C (Windows/Linux) or Cmd+C (macOS) twice quickly
-3. The translation will appear as a notification and be copied to your clipboard
-4. Paste (Ctrl/Cmd+V) wherever you need the translated text
+3. Depending on your display mode:
+   - **Notification mode**: Translation appears as notification and is copied to clipboard
+   - **Popup mode**: Translation appears in a floating window
+4. In popup mode:
+   - Press Enter or click "Copy" to copy and close
+   - Press Escape or click "×" to close without copying
+   - Right-click the text for copy options
 
 ### Smart Translation
 
 The app intelligently determines the translation direction:
 - If the source text matches your primary language → translates to secondary language
 - If the source text is any other language → translates to primary language
+- For mixed-language text → detects the language with highest word count ratio
 
 ### Menu Options
 
 Access these options by clicking the system tray icon:
-- **Primary/Secondary Language**: Set your translation language preferences (including custom languages)
+- **Primary/Secondary Language**: Set your translation language preferences (26+ built-in languages + custom)
 - **Display Mode**: Choose between notification and popup window
-- **AI Model**: Choose which AI model to use for translations (including custom models)
-- **Settings**: Configure API keys, custom instructions, models, and languages
+- **AI Model**: Choose which AI model to use for translations (Claude 4.5, GPT-5, Gemini 2.5, or custom)
+- **Settings**: Configure API keys, custom instructions, models, languages, and display settings
 - **Pause Translation**: Temporarily disable the translation feature
-- **Check for Updates**: Check for new versions of the app
+- **Stop Current Translation**: Cancel ongoing translation
+- **Check for Updates**: Check for new versions with progress display
 - **Quit**: Exit the application
+
+### Keyboard Shortcuts
+
+- **Ctrl/Cmd+C (twice)**: Trigger translation
+- **Enter** (in popup): Copy and close
+- **Escape** (in popup): Close without copying
+
+### Auto-Update
+
+Honyo automatically checks for updates on startup and every hour:
+- **Update available**: Choose to Download, remind Later, or Skip the version
+- **Downloading**: Progress displayed in menu (e.g., "Downloading Update (45%)...")
+- **Downloaded**: Option to restart and install or install later
+- **Skipped versions**: Won't be notified again until a new version is released
+- **Manual check**: Use "Check for Updates" from the menu
 
 ### Environment Variables
 
