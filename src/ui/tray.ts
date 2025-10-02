@@ -1,6 +1,7 @@
 import { Tray } from 'electron';
 import { createNormalIcon, createTranslatingIcon } from './icons.ts';
 import { createTrayMenu } from './menu.ts';
+import { setMenuUpdateCallback } from '../app/updater.ts';
 
 let tray: Tray | null = null;
 let normalIcon: Electron.NativeImage | null = null;
@@ -16,9 +17,19 @@ export function createTray(): Tray {
 
   console.log('Tray created successfully');
 
-  // Create menu
-  const menu = createTrayMenu(tray, () => {});
-  tray.setContextMenu(menu);
+  // Create menu update function
+  const updateMenu = (): void => {
+    if (tray) {
+      const menu = createTrayMenu(tray, () => {});
+      tray.setContextMenu(menu);
+    }
+  };
+
+  // Register menu update callback for updater
+  setMenuUpdateCallback(updateMenu);
+
+  // Create initial menu
+  updateMenu();
   tray.setToolTip('Honyo - Double Cmd+C to translate');
 
   return tray;
