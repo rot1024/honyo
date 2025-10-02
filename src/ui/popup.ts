@@ -1,4 +1,4 @@
-import { BrowserWindow, screen, ipcMain, clipboard } from 'electron';
+import { BrowserWindow, screen, ipcMain, clipboard, Menu } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { exec } from 'child_process';
@@ -160,6 +160,34 @@ export function setupPopupIPC(): void {
     if (popupWindow && !popupWindow.isDestroyed()) {
       popupWindow.close();
     }
+  });
+
+  ipcMain.on('show-context-menu', (event, data: { selectedText: string; hasSelection: boolean }) => {
+    if (!popupWindow || popupWindow.isDestroyed()) return;
+
+    const template = [];
+
+    if (data.hasSelection) {
+      template.push(
+        {
+          label: 'Copy',
+          click: () => {
+            clipboard.writeText(data.selectedText);
+          },
+        },
+        { type: 'separator' as const },
+      );
+    }
+
+    template.push({
+      label: 'Copy All',
+      click: () => {
+        popupWindow?.webContents.send('copy-all-requested');
+      },
+    });
+
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup({ window: popupWindow });
   });
 }
 

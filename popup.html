@@ -222,6 +222,19 @@
       const { ipcRenderer } = require('electron');
       let currentTranslation = '';
 
+      // Context menu for translation text
+      function showContextMenu(e) {
+        e.preventDefault();
+        const selectedText = window.getSelection().toString();
+        ipcRenderer.send('show-context-menu', { selectedText, hasSelection: !!selectedText });
+      }
+
+      // Add context menu to translation text
+      document.addEventListener('DOMContentLoaded', () => {
+        const translationText = document.getElementById('translation-text');
+        translationText.addEventListener('contextmenu', showContextMenu);
+      });
+
       // Show loading state
       ipcRenderer.on('translation-loading', () => {
         document.getElementById('spinner-container').classList.add('active');
@@ -263,6 +276,11 @@
       function closePopup() {
         ipcRenderer.send('close-popup');
       }
+
+      // Handle copy all from context menu
+      ipcRenderer.on('copy-all-requested', () => {
+        copyTranslation();
+      });
 
       // Handle keyboard shortcuts
       document.addEventListener('keydown', e => {
