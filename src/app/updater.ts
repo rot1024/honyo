@@ -4,6 +4,7 @@ import { dialog, BrowserWindow, shell } from 'electron';
 import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { getConfig, updateConfig, clearSkippedUpdateVersion } from '../config/index.ts';
 
 let isCheckingForUpdate = false;
 let menuUpdateCallback: (() => void) | null = null;
@@ -102,6 +103,13 @@ export function setupAutoUpdater(): void {
     isCheckingForUpdate = false;
     menuUpdateCallback?.();
 
+    // Check if this version was previously skipped
+    const config = getConfig();
+    if (!isManualCheck && config.skippedUpdateVersion === info.version) {
+      console.log(`Update ${info.version} was previously skipped, not showing dialog`);
+      return;
+    }
+
     void dialog
       .showMessageBox({
         type: 'info',
@@ -111,12 +119,16 @@ export function setupAutoUpdater(): void {
           typeof info.releaseNotes === 'string'
             ? info.releaseNotes
             : 'New version available with improvements and bug fixes.',
-        buttons: ['Download', 'Later'],
+        buttons: ['Download', 'Later', 'Skip This Version'],
         defaultId: 0,
+        cancelId: 1,
       })
       .then(result => {
         if (result.response === 0) {
+          // Download button
           console.log('User clicked Download, starting download...');
+          // Clear skipped version when user chooses to download
+          clearSkippedUpdateVersion();
           isDownloading = true;
           autoUpdater
             .downloadUpdate()
@@ -151,6 +163,13 @@ export function setupAutoUpdater(): void {
                 });
               }
           });
+        } else if (result.response === 1) {
+          // Later button - do nothing, will check again next time
+          console.log('User chose to be reminded later');
+        } else if (result.response === 2) {
+          // Skip This Version button - save the version to skip it
+          console.log(`User skipped update ${info.version}`);
+          updateConfig({ skippedUpdateVersion: info.version });
         }
       });
   });

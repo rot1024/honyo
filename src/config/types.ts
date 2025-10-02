@@ -21,6 +21,7 @@ export interface Config {
   displayMode: DisplayMode;
   customModel?: CustomModel;
   customLanguages?: string[];
+  skippedUpdateVersion?: string;
 }
 
 export interface SavedConfig extends Config {

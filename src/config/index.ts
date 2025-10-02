@@ -99,6 +99,13 @@ export function updateConfig(updates: Partial<Config>): void {
   saveConfig();
 }
 
+export function clearSkippedUpdateVersion(): void {
+  if (config.skippedUpdateVersion) {
+    delete config.skippedUpdateVersion;
+    saveConfig();
+  }
+}
+
 export function saveConfig(): void {
   saveConfigToFile(config, isPaused);
 }
