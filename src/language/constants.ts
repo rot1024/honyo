@@ -15,6 +15,17 @@ export const LANGUAGES: Record<string, string> = {
   hi: 'Hindi',
   th: 'Thai',
   vi: 'Vietnamese',
+  id: 'Indonesian',
+  ms: 'Malay',
+  tl: 'Filipino',
+  nl: 'Dutch',
+  pl: 'Polish',
+  tr: 'Turkish',
+  uk: 'Ukrainian',
+  sv: 'Swedish',
+  da: 'Danish',
+  no: 'Norwegian',
+  fi: 'Finnish',
 };
 
 // Array of language names (for menu display)
