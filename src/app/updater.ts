@@ -110,15 +110,28 @@ export function setupAutoUpdater(): void {
       return;
     }
 
+    // Format release notes
+    let releaseNotes = 'New version available with improvements and bug fixes.';
+    if (info.releaseNotes) {
+      if (typeof info.releaseNotes === 'string') {
+        releaseNotes = info.releaseNotes;
+      } else if (Array.isArray(info.releaseNotes)) {
+        // electron-updater returns array of release notes objects
+        releaseNotes = info.releaseNotes
+          .map(note => {
+            const version = note.version ? `Version ${note.version}:\n` : '';
+            return version + (note.note || '');
+          })
+          .join('\n\n');
+      }
+    }
+
     void dialog
       .showMessageBox({
         type: 'info',
         title: 'Update Available',
-        message: `A new version ${info.version} is available. Would you like to download it?`,
-        detail:
-          typeof info.releaseNotes === 'string'
-            ? info.releaseNotes
-            : 'New version available with improvements and bug fixes.',
+        message: `A new version ${info.version} is available.`,
+        detail: releaseNotes,
         buttons: ['Download', 'Later', 'Skip This Version'],
         defaultId: 0,
         cancelId: 1,
