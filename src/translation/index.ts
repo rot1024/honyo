@@ -56,7 +56,7 @@ export async function translateText(
 
     // Add custom prompt if configured
     const customPromptSection = config.customPrompt
-      ? `\n\nAdditional instructions:\n${config.customPrompt}\n`
+      ? `\n\nAdditional instructions:\n${config.customPrompt}`
       : '';
 
     // Get all available languages
@@ -65,27 +65,27 @@ export async function translateText(
       allLanguages.push(...config.customLanguages);
     }
 
-    const prompt = `You are a translator. Your primary translation target is ${primaryLanguage} and your secondary translation target is ${secondaryLanguage}.
+    const systemPrompt = `You are a translator. Your primary translation target is ${primaryLanguage} and your secondary translation target is ${secondaryLanguage}.
 
 Rules:
 1. If the text is in ${primaryLanguage}, translate it to ${secondaryLanguage}
 2. If the text is in any other language (including ${secondaryLanguage}), translate it to ${primaryLanguage}
 3. Return ONLY the translated text. Do not include any explanations, notes, or phrases like "Here is the translation" or "The translation is". Just the translated text itself.
 
-Available languages to detect from: ${allLanguages.join(', ')}${customPromptSection}
-
-Text to translate: ${text}`;
+Available languages to detect from: ${allLanguages.join(', ')}${customPromptSection}`;
 
     const { text: translation } = await generateText(
       signal
         ? {
             model,
-            prompt,
+            system: systemPrompt,
+            prompt: text,
             abortSignal: signal,
           }
         : {
             model,
-            prompt,
+            system: systemPrompt,
+            prompt: text,
           },
     );
     console.log('Translation complete:', translation.slice(0, 50) + '...');
