@@ -135,38 +135,68 @@ export function setupAutoUpdater(): void {
       }
     }
 
-    void dialog
-      .showMessageBox({
-        type: 'info',
-        title: 'Update Available',
-        message: `A new version ${info.version} is available.`,
-        detail: releaseNotes,
-        buttons: ['Download', 'Later', 'Skip This Version'],
-        defaultId: 0,
-        cancelId: 1,
-      })
-      .then(result => {
-        if (result.response === 0) {
-          // Download button
-          console.log('User clicked Download, starting download...');
-          // Clear skipped version when user chooses to download
-          clearSkippedUpdateVersion();
-          isDownloading = true;
-          menuUpdateCallback?.();
-          autoUpdater
-            .downloadUpdate()
-            .then(() => {
-              console.log('Download started successfully');
-            })
-            .catch(async (error: unknown) => {
-              console.error('Failed to start download:', error);
-              isDownloading = false;
-              menuUpdateCallback?.();
+    // For macOS, use direct GitHub download for unsigned builds
+    if (process.platform === 'darwin') {
+      void dialog
+        .showMessageBox({
+          type: 'info',
+          title: 'Update Available',
+          message: `A new version ${info.version} is available.`,
+          detail: releaseNotes,
+          buttons: ['Open GitHub Releases', 'Later', 'Skip This Version'],
+          defaultId: 0,
+          cancelId: 1,
+        })
+        .then(result => {
+          if (result.response === 0) {
+            // Open GitHub Releases button
+            console.log('User clicked Open GitHub Releases, opening browser...');
+            clearSkippedUpdateVersion();
+            if (GITHUB_RELEASES_URL) {
+              void shell.openExternal(GITHUB_RELEASES_URL);
+            }
+          } else if (result.response === 1) {
+            // Later button - do nothing, will check again next time
+            console.log('User chose to be reminded later');
+          } else if (result.response === 2) {
+            // Skip This Version button - save the version to skip it
+            console.log(`User skipped update ${info.version}`);
+            updateConfig({ skippedUpdateVersion: info.version });
+          }
+        });
+    } else {
+      // For other platforms, use auto-updater as usual
+      void dialog
+        .showMessageBox({
+          type: 'info',
+          title: 'Update Available',
+          message: `A new version ${info.version} is available.`,
+          detail: releaseNotes,
+          buttons: ['Download', 'Later', 'Skip This Version'],
+          defaultId: 0,
+          cancelId: 1,
+        })
+        .then(result => {
+          if (result.response === 0) {
+            // Download button
+            console.log('User clicked Download, starting download...');
+            // Clear skipped version when user chooses to download
+            clearSkippedUpdateVersion();
+            isDownloading = true;
+            menuUpdateCallback?.();
+            autoUpdater
+              .downloadUpdate()
+              .then(() => {
+                console.log('Download started successfully');
+              })
+              .catch(async (error: unknown) => {
+                console.error('Failed to start download:', error);
+                isDownloading = false;
+                menuUpdateCallback?.();
 
-              // Open GitHub Releases instead of showing error dialog
-              if (GITHUB_RELEASES_URL) {
-                const res = await dialog
-                  .showMessageBox({
+                // Open GitHub Releases instead of showing error dialog
+                if (GITHUB_RELEASES_URL) {
+                  const res = await dialog.showMessageBox({
                     type: 'error',
                     title: 'Download Failed',
                     message: 'Failed to download the update automatically.',
@@ -174,28 +204,29 @@ export function setupAutoUpdater(): void {
                     buttons: ['Open GitHub Releases', 'Cancel'],
                     defaultId: 0,
                   });
-                if (res.response === 0) {
-                  void shell.openExternal(GITHUB_RELEASES_URL);
+                  if (res.response === 0) {
+                    void shell.openExternal(GITHUB_RELEASES_URL);
+                  }
+                } else {
+                  await dialog.showMessageBox({
+                    type: 'error',
+                    title: 'Download Failed',
+                    message: 'Failed to download the update automatically.',
+                    detail: 'Please check your network connection and try again later.',
+                    buttons: ['OK'],
+                  });
                 }
-              } else {
-                await dialog.showMessageBox({
-                  type: 'error',
-                  title: 'Download Failed',
-                  message: 'Failed to download the update automatically.',
-                  detail: 'Please check your network connection and try again later.',
-                  buttons: ['OK'],
-                });
-              }
-          });
-        } else if (result.response === 1) {
-          // Later button - do nothing, will check again next time
-          console.log('User chose to be reminded later');
-        } else if (result.response === 2) {
-          // Skip This Version button - save the version to skip it
-          console.log(`User skipped update ${info.version}`);
-          updateConfig({ skippedUpdateVersion: info.version });
-        }
-      });
+              });
+          } else if (result.response === 1) {
+            // Later button - do nothing, will check again next time
+            console.log('User chose to be reminded later');
+          } else if (result.response === 2) {
+            // Skip This Version button - save the version to skip it
+            console.log(`User skipped update ${info.version}`);
+            updateConfig({ skippedUpdateVersion: info.version });
+          }
+        });
+    }
   });
 
   autoUpdater.on('update-not-available', info => {
