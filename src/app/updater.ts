@@ -5,6 +5,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { getConfig, updateConfig, clearSkippedUpdateVersion } from '../config/index.ts';
+import TurndownService from 'turndown';
 
 let isCheckingForUpdate = false;
 let menuUpdateCallback: (() => void) | null = null;
@@ -56,6 +57,15 @@ function getGitHubReleasesUrl(): string {
 }
 
 const GITHUB_RELEASES_URL = getGitHubReleasesUrl();
+
+// Convert HTML to plain text using Turndown
+function convertHtmlToMarkdown(html: string): string {
+  const turndownService = new TurndownService({
+    headingStyle: 'atx',
+    codeBlockStyle: 'fenced',
+  });
+  return turndownService.turndown(html);
+}
 
 export function setMenuUpdateCallback(callback: () => void): void {
   menuUpdateCallback = callback;
@@ -126,13 +136,14 @@ export function setupAutoUpdater(): void {
     let releaseNotes = 'New version available with improvements and bug fixes.';
     if (info.releaseNotes) {
       if (typeof info.releaseNotes === 'string') {
-        releaseNotes = info.releaseNotes;
+        releaseNotes = convertHtmlToMarkdown(info.releaseNotes);
       } else if (Array.isArray(info.releaseNotes)) {
         // electron-updater returns array of release notes objects
         releaseNotes = info.releaseNotes
           .map(note => {
             const version = note.version ? `Version ${note.version}:\n` : '';
-            return version + (note.note || '');
+            const noteText = note.note ? convertHtmlToMarkdown(note.note) : '';
+            return version + noteText;
           })
           .join('\n\n');
       }
@@ -329,7 +340,7 @@ export function setupAutoUpdater(): void {
         message: 'Update downloaded. The application will restart to apply the update.',
         detail:
           typeof info.releaseNotes === 'string'
-            ? info.releaseNotes
+            ? convertHtmlToMarkdown(info.releaseNotes)
             : 'The update will be installed when you restart the application.',
         buttons: ['Restart Now', 'Later'],
         defaultId: 0,

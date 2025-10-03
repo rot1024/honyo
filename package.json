@@ -42,6 +42,7 @@
     "@electron/universal": "^3.0.1",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^24.6.2",
+    "@types/turndown": "^5.0.5",
     "@typescript-eslint/eslint-plugin": "^8.45.0",
     "@typescript-eslint/parser": "^8.45.0",
     "@vitest/ui": "^3.2.4",
@@ -69,6 +70,7 @@
     "ai": "^5.0.60",
     "dotenv": "^17.2.3",
     "electron-updater": "^6.6.2",
+    "turndown": "^7.2.1",
     "uiohook-napi": "^1.5.4",
     "zod": "^4.1.11"
   },
