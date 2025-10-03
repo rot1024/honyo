@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com/rot1024/honyo/compare/v0.4.1...v0.4.2) (2025-10-03)
+
+
+### Bug Fixes
+
+* open releases page on donwload error ([8734110](https://github.com/rot1024/honyo/commit/8734110a48e21f32364fb24552e345309b7f1556))
+
 ## [0.4.0](https://github.com/rot1024/honyo/compare/v0.3.4...v0.4.0) (2025-08-04)
 
 
