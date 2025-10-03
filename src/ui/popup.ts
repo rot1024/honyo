@@ -162,33 +162,36 @@ export function setupPopupIPC(): void {
     }
   });
 
-  ipcMain.on('show-context-menu', (event, data: { selectedText: string; hasSelection: boolean }) => {
-    if (!popupWindow || popupWindow.isDestroyed()) return;
+  ipcMain.on(
+    'show-context-menu',
+    (event, data: { selectedText: string; hasSelection: boolean }) => {
+      if (!popupWindow || popupWindow.isDestroyed()) return;
 
-    const template = [];
+      const template = [];
 
-    if (data.hasSelection) {
-      template.push(
-        {
-          label: 'Copy',
-          click: () => {
-            clipboard.writeText(data.selectedText);
+      if (data.hasSelection) {
+        template.push(
+          {
+            label: 'Copy',
+            click: () => {
+              clipboard.writeText(data.selectedText);
+            },
           },
+          { type: 'separator' as const },
+        );
+      }
+
+      template.push({
+        label: 'Copy All',
+        click: () => {
+          popupWindow?.webContents.send('copy-all-requested');
         },
-        { type: 'separator' as const },
-      );
-    }
+      });
 
-    template.push({
-      label: 'Copy All',
-      click: () => {
-        popupWindow?.webContents.send('copy-all-requested');
-      },
-    });
-
-    const menu = Menu.buildFromTemplate(template);
-    menu.popup({ window: popupWindow });
-  });
+      const menu = Menu.buildFromTemplate(template);
+      menu.popup({ window: popupWindow });
+    },
+  );
 }
 
 export function closePopup(): void {

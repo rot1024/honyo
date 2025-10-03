@@ -30,8 +30,8 @@ describe('AI Models', () => {
       expect(AI_MODELS).toHaveProperty(DEFAULT_AI_MODEL);
     });
 
-    it('should be claude-3.5-haiku', () => {
-      expect(DEFAULT_AI_MODEL).toBe('claude-3.5-haiku');
+    it('should be claude-4.5-sonnet', () => {
+      expect(DEFAULT_AI_MODEL).toBe('claude-4.5-sonnet');
     });
   });
 

@@ -87,7 +87,10 @@ export function setupAutoUpdater(): void {
   }
 
   console.log('Auto-updater configuration:');
-  console.log('- Current version:', autoUpdater.currentVersion?.version || 'unknown');
+  console.log(
+    '- Current version:',
+    (autoUpdater.currentVersion as { version?: string } | null)?.version || 'unknown',
+  );
   console.log('- Platform:', process.platform);
   console.log('- Allow downgrade:', autoUpdater.allowDowngrade);
 
