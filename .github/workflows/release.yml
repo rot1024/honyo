@@ -97,9 +97,14 @@ jobs:
     - name: Download all artifacts
       uses: actions/download-artifact@v4
 
-    - name: Remove builder-debug.yml files
+    - name: Remove duplicate and unwanted files
       run: |
         find . -name "builder-debug.yml" -type f -delete
+        # Remove duplicate latest-*.yml files (keep only one of each)
+        # Keep the first occurrence and remove duplicates from other arch builds
+        if [ -f "macos-latest-x64-build/latest-mac.yml" ] && [ -f "macos-latest-arm64-build/latest-mac.yml" ]; then
+          rm "macos-latest-arm64-build/latest-mac.yml"
+        fi
 
     - name: Create Release
       uses: softprops/action-gh-release@v2
