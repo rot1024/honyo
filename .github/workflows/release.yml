@@ -89,9 +89,19 @@ jobs:
 
         # Generate changelog between tags
         if [ -n "$PREVIOUS_TAG" ]; then
-          npx conventional-changelog -p angular --release-count 0 ${PREVIOUS_TAG}..${CURRENT_TAG} > RELEASE_NOTES.md
+          npx conventional-changelog -p angular --release-count 0 ${PREVIOUS_TAG}..${CURRENT_TAG} 2>/dev/null | awk -v tag="$CURRENT_TAG" '
+            /^## / {
+              if (found) exit
+              if ($0 ~ tag) { found=1; print; next }
+            }
+            /^# / {
+              if (found) exit
+              if ($0 ~ tag) { found=1; print; next }
+            }
+            found { print }
+          ' > RELEASE_NOTES.md
         else
-          npx conventional-changelog -p angular --release-count 0 > RELEASE_NOTES.md
+          npx conventional-changelog -p angular --release-count 1 > RELEASE_NOTES.md
         fi
 
     - name: Download all artifacts
