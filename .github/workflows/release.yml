@@ -82,7 +82,17 @@ jobs:
       run: npm ci
 
     - name: Generate changelog
-      run: npm run changelog
+      run: |
+        # Get the current tag and previous tag
+        CURRENT_TAG=${GITHUB_REF#refs/tags/}
+        PREVIOUS_TAG=$(git tag --sort=-version:refname | grep -A1 "^${CURRENT_TAG}$" | tail -n1)
+
+        # Generate changelog between tags
+        if [ -n "$PREVIOUS_TAG" ]; then
+          npx conventional-changelog -p angular --release-count 0 ${PREVIOUS_TAG}..${CURRENT_TAG} > RELEASE_NOTES.md
+        else
+          npx conventional-changelog -p angular --release-count 0 > RELEASE_NOTES.md
+        fi
 
     - name: Download all artifacts
       uses: actions/download-artifact@v4
