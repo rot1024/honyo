@@ -252,16 +252,20 @@
       });
 
       // Receive streaming chunks (keep button disabled during streaming)
+      let isStreaming = false;
       ipcRenderer.on('translation-chunk', (event, text) => {
+        isStreaming = true;
         currentTranslation = text;
         document.getElementById('spinner-container').classList.remove('active');
         document.getElementById('translation-text').style.display = 'block';
         document.getElementById('translation-text').textContent = text;
         // Keep button disabled until streaming completes
+        document.querySelector('.copy-btn').disabled = true;
       });
 
       // Receive streaming completion
       ipcRenderer.on('translation-complete', (event, text) => {
+        isStreaming = false;
         currentTranslation = text;
         document.getElementById('translation-text').textContent = text;
         document.querySelector('.copy-btn').disabled = false;
@@ -287,7 +291,10 @@
         if (e.key === 'Escape') {
           closePopup();
         } else if (e.key === 'Enter') {
-          copyTranslation();
+          // Only allow copy when not streaming
+          if (!isStreaming && currentTranslation) {
+            copyTranslation();
+          }
         }
       });
     </script>
