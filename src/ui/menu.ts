@@ -5,7 +5,7 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { languages } from '../language/index.ts';
-import { AI_MODELS, CUSTOM_MODEL_ID } from '../models.ts';
+import { AI_MODELS, CUSTOM_MODEL_ID, type AIModelInfo } from '../models.ts';
 import { getConfig, updateConfig, getPausedState, setPausedState } from '../config/index.ts';
 import { openSettingsWindow } from './settings.ts';
 import {
@@ -127,18 +127,78 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
           ? 'Custom Model'
           : (AI_MODELS[config.aiModel]?.name ?? 'Unknown')
       }`,
-      submenu: [
-        ...Object.entries(AI_MODELS).map(([modelId, modelInfo]) => ({
-          label: modelInfo.name,
-          type: 'radio' as const,
-          checked: config.aiModel === modelId,
-          click: (): void => {
-            updateConfig({ aiModel: modelId });
-            tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
-          },
-        })),
-        { type: 'separator' as const },
-        {
+      submenu: ((): Array<
+        | { label: string; type: 'radio'; checked: boolean; click: () => void }
+        | { type: 'separator' }
+      > => {
+        const menuItems: Array<
+          | { label: string; type: 'radio'; checked: boolean; click: () => void }
+          | { type: 'separator' }
+        > = [];
+
+        // Group models by provider
+        const modelsByProvider: {
+          anthropic: Array<[string, AIModelInfo]>;
+          openai: Array<[string, AIModelInfo]>;
+          google: Array<[string, AIModelInfo]>;
+        } = {
+          anthropic: [],
+          openai: [],
+          google: [],
+        };
+
+        for (const [modelId, modelInfo] of Object.entries(AI_MODELS)) {
+          modelsByProvider[modelInfo.provider].push([modelId, modelInfo]);
+        }
+
+        // Add Anthropic models
+        for (const [modelId, modelInfo] of modelsByProvider.anthropic) {
+          menuItems.push({
+            label: modelInfo.name,
+            type: 'radio' as const,
+            checked: config.aiModel === modelId,
+            click: (): void => {
+              updateConfig({ aiModel: modelId });
+              tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+            },
+          });
+        }
+
+        // Add separator before OpenAI models
+        if (modelsByProvider.openai.length > 0) {
+          menuItems.push({ type: 'separator' as const });
+          for (const [modelId, modelInfo] of modelsByProvider.openai) {
+            menuItems.push({
+              label: modelInfo.name,
+              type: 'radio' as const,
+              checked: config.aiModel === modelId,
+              click: (): void => {
+                updateConfig({ aiModel: modelId });
+                tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+              },
+            });
+          }
+        }
+
+        // Add separator before Google models
+        if (modelsByProvider.google.length > 0) {
+          menuItems.push({ type: 'separator' as const });
+          for (const [modelId, modelInfo] of modelsByProvider.google) {
+            menuItems.push({
+              label: modelInfo.name,
+              type: 'radio' as const,
+              checked: config.aiModel === modelId,
+              click: (): void => {
+                updateConfig({ aiModel: modelId });
+                tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
+              },
+            });
+          }
+        }
+
+        // Add separator before Custom Model
+        menuItems.push({ type: 'separator' as const });
+        menuItems.push({
           label: 'Custom Model',
           type: 'radio' as const,
           checked: config.aiModel === CUSTOM_MODEL_ID,
@@ -146,8 +206,10 @@ export function createTrayMenu(tray: Tray | null, updateTrayTitle: (title: strin
             updateConfig({ aiModel: CUSTOM_MODEL_ID });
             tray?.setContextMenu(createTrayMenu(tray, updateTrayTitle));
           },
-        },
-      ],
+        });
+
+        return menuItems;
+      })(),
     },
     {
       label: 'Settings...',
