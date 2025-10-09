@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.5](https://github.com/rot1024/honyo/compare/v0.4.4...v0.4.5) (2025-10-09)
+
+
+### Features
+
+* add separator for aach model provider in menu ([17af341](https://github.com/rot1024/honyo/commit/17af34102f2ee635e3edabe85a29b6b4a2a166b2))
+
+
+### Bug Fixes
+
+* clean up system prompt ([a7b628c](https://github.com/rot1024/honyo/commit/a7b628cf8389cdf8d2594f0e7eb201282ab9fee1))
+* close popup even in streaming on press enter key ([8078d16](https://github.com/rot1024/honyo/commit/8078d16d191a90ba47c7068d5c4cf422ecda88a7))
+* optimisze system prompt to support short text translation ([73770fa](https://github.com/rot1024/honyo/commit/73770fa8b3bd02f2de1db19b239459d7d649282c))
+
 ### [0.4.4](https://github.com/rot1024/honyo/compare/v0.4.3...v0.4.4) (2025-10-03)
 
 
