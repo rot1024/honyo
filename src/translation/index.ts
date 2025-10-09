@@ -39,8 +39,7 @@ Output Format:
 - Do NOT use phrases like "Here is the translation:", "The translation is:", etc.
 - Output must be the translation itself, nothing else
 
-Detectable languages: ${allLanguages.join(', ')}${customPromptSection}`;
-
+${customPromptSection}`.trim();
 }
 
 function validateApiKey(config: Config, apiKeys: ApiKeys): { valid: boolean; error?: string } {
