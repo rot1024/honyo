@@ -57,14 +57,6 @@ Download the latest version from [GitHub Releases](https://github.com/rot1024/ho
    - Move `Honyo.app` to your Applications folder
 
 4. **Remove quarantine attribute** (required for unsigned apps):
-
-   **Option A: Use the setup script (recommended)**
-   - Download `Setup-Honyo.command` from the same release
-   - Double-click the downloaded file
-   - Click "Open" if prompted by Gatekeeper
-   - Follow the on-screen instructions
-
-   **Option B: Use Terminal**
    ```bash
    xattr -cr /Applications/Honyo.app
    ```

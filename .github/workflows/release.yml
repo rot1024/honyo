@@ -121,7 +121,6 @@ jobs:
           macos-latest-arm64-build/*
           windows-latest-x64-build/*
           ubuntu-latest-x64-build/*
-          scripts/Setup-Honyo.command
         draft: false
         prerelease: false
         fail_on_unmatched_files: false
