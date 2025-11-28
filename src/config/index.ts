@@ -81,9 +81,8 @@ export function initializeConfig(): void {
   }
 
   // Restore isPaused state
-  const savedIsPaused = (config as Config & { isPaused?: boolean }).isPaused;
-  if (typeof savedIsPaused === 'boolean') {
-    isPaused = savedIsPaused;
+  if (typeof config.isPaused === 'boolean') {
+    isPaused = config.isPaused;
   }
 
   // Load API keys
