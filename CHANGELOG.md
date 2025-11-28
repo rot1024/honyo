@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com/rot1024/honyo/compare/v0.4.5...v0.5.0) (2025-11-28)
+
+
+### Features
+
+* add Setup-Honyo.command for macOS quarantine removal ([410c2a2](https://github.com/rot1024/honyo/commit/410c2a2ef27489016aa98f0c8f1c0dfcd7ec2a35))
+* update AI model list with latest models ([27e90da](https://github.com/rot1024/honyo/commit/27e90da3648df872ec2f008fe1488f171f157e94))
+
+
+### Bug Fixes
+
+* remove redundant type cast in config initialization ([a43e0e9](https://github.com/rot1024/honyo/commit/a43e0e9bddd56f53903e33f49715affda1864315))
+
+
+### Code Refactoring
+
+* migrate scripts to TypeScript and use native Node.js type stripping ([7deaade](https://github.com/rot1024/honyo/commit/7deaadec770cc976fd7d0d2886d566bd486623f8))
+
 ### [0.4.5](https://github.com/rot1024/honyo/compare/v0.4.4...v0.4.5) (2025-10-09)
 
 
