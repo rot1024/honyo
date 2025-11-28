@@ -42,8 +42,11 @@ jobs:
     - name: Type check
       run: npm run typecheck
 
-    - name: Build Electron app
-      run: npm run dist -- --${{ matrix.arch }} --publish never
+    - name: Build
+      run: npm run build
+
+    - name: Package Electron app
+      run: npm run package -- --${{ matrix.arch }} --publish never
       env:
         ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
