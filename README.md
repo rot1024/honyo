@@ -51,22 +51,27 @@ Download the latest version from [GitHub Releases](https://github.com/rot1024/ho
 2. **For DMG files**:
    - Open the DMG file
    - Drag Honyo.app to your Applications folder
-   - Remove the quarantine attribute:
-     ```bash
-     xattr -cr /Applications/Honyo.app
-     ```
-   - **First launch**: Right-click (or Control-click) on Honyo.app and select "Open"
-   - Click "Open" in the security dialog
 
 3. **For ZIP files**:
    - Extract the zip file
    - Move `Honyo.app` to your Applications folder
-   - Remove the quarantine attribute:
-     ```bash
-     xattr -cr /Applications/Honyo.app
-     ```
 
-4. Grant accessibility permissions:
+4. **Remove quarantine attribute** (required for unsigned apps):
+
+   **Option A: Use the setup script (recommended)**
+   - Download `Setup-Honyo.command` from the same release
+   - Double-click the downloaded file
+   - Click "Open" if prompted by Gatekeeper
+   - Follow the on-screen instructions
+
+   **Option B: Use Terminal**
+   ```bash
+   xattr -cr /Applications/Honyo.app
+   ```
+
+5. **First launch**: Right-click (or Control-click) on Honyo.app and select "Open", then click "Open" in the security dialog
+
+6. Grant accessibility permissions:
    - Open System Preferences > Security & Privacy > Privacy > Accessibility
    - Add and enable Honyo.app
 
