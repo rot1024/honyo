@@ -94,8 +94,8 @@ export function setupSettingsIPC(): void {
 
   ipcMain.on('load-auto-close-on-blur', event => {
     const config = getConfig();
-    event.reply('auto-close-on-blur-loaded', config.autoCloseOnBlur ?? false);
-    event.reply('enable-streaming-loaded', config.enableStreaming ?? false);
+    event.reply('auto-close-on-blur-loaded', config.autoCloseOnBlur ?? true);
+    event.reply('enable-streaming-loaded', config.enableStreaming ?? true);
   });
 
   ipcMain.on('save-auto-close-on-blur', (event, autoCloseOnBlur: boolean) => {

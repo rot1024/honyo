@@ -42,7 +42,8 @@ function getDefaultConfig(): Config {
     secondaryLanguage: secondaryLang,
     isPaused: false,
     aiModel: DEFAULT_AI_MODEL,
-    autoCloseOnBlur: false,
+    autoCloseOnBlur: true,
+    enableStreaming: true,
     customPrompt: '',
     displayMode: 'notification',
   };
@@ -77,7 +78,12 @@ export function initializeConfig(): void {
 
   // Initialize autoCloseOnBlur if not present
   if (config.autoCloseOnBlur === undefined) {
-    config.autoCloseOnBlur = false;
+    config.autoCloseOnBlur = true;
+  }
+
+  // Initialize enableStreaming if not present
+  if (config.enableStreaming === undefined) {
+    config.enableStreaming = true;
   }
 
   // Restore isPaused state
