@@ -46,7 +46,7 @@ jobs:
       run: npm run build
 
     - name: Package Electron app
-      run: npm run package -- --${{ matrix.arch }} --publish never
+      run: ./node_modules/.bin/electron-builder --${{ matrix.arch }} --publish never
       env:
         ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES: true
 
