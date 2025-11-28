@@ -1,12 +1,11 @@
 #!/usr/bin/env node
 
-// NOTE: This build process is temporary until Electron supports Node v24
-// When Electron supports Node v24 (where TypeScript support is built-in), we can:
+// NOTE: This build process is temporary until Electron supports Node v24+
+// When Electron supports Node v24+ (where TypeScript support is built-in), we can:
 // 1. Remove this entire scripts/ directory
 // 2. Remove the "build" script from package.json
 // 3. Change "dist" script back to just "electron-builder"
 // 4. Use src/*.ts files directly without compilation
-// 5. Remove NODE_OPTIONS="--experimental-strip-types" from the start script
 
 import esbuild from 'esbuild';
 import { readFileSync, existsSync } from 'fs';
@@ -25,7 +24,7 @@ if (existsSync(buildDir)) {
 }
 
 // Find all TypeScript files recursively
-function findTsFiles(dir, files = []) {
+function findTsFiles(dir: string, files: string[] = []): string[] {
   const entries = readdirSync(dir);
   for (const entry of entries) {
     const fullPath = join(dir, entry);
@@ -73,7 +72,7 @@ try {
 }
 
 // Function to fix .ts extensions in imports
-async function fixImports(dir) {
+async function fixImports(dir: string): Promise<void> {
   const { readdir, readFile, writeFile } = await import('fs/promises');
   const files = await readdir(dir, { withFileTypes: true });
   

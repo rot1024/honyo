@@ -3,9 +3,12 @@
   "version": "0.4.5",
   "main": "src/main.ts",
   "type": "module",
+  "engines": {
+    "node": ">=23.6.0"
+  },
   "scripts": {
-    "_comment": "NOTE: 'build' and 'dist' scripts are temporary until Electron supports Node v24. See scripts/build-esbuild.js for details.",
-    "start": "NODE_OPTIONS=\"--experimental-strip-types\" electron .",
+    "_comment": "NOTE: 'build' and 'dist' scripts are temporary until Electron supports Node v24. See scripts/build.ts for details.",
+    "start": "electron .",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/**/*.ts --cache",
     "lint:fix": "eslint src/**/*.ts --fix --cache",
@@ -14,8 +17,8 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
-    "build": "node scripts/build.js",
-    "build:icons": "node scripts/make-icons.mjs",
+    "build": "node scripts/build.ts",
+    "build:icons": "node scripts/make-icons.ts",
     "dist": "npm run build && electron-builder",
     "dist:mac": "npm run build && npm run dist:mac:x64 && npm run dist:mac:arm64",
     "dist:mac:x64": "electron-builder --mac --x64",
@@ -58,7 +61,6 @@
     "jiti": "^2.6.1",
     "prettier": "^3.6.2",
     "standard-version": "^9.5.0",
-    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.45.0",
     "vitest": "^4.0.14"

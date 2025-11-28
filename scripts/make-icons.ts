@@ -19,8 +19,8 @@ const BASE = args.name || 'icon';
 
 const PNG_SIZES = [16, 24, 32, 48, 64, 128, 256, 512, 1024];
 
-async function ensureDir(dir) { 
-  await fs.mkdir(dir, { recursive: true }); 
+async function ensureDir(dir: string): Promise<void> {
+  await fs.mkdir(dir, { recursive: true });
 }
 
 async function renderPngVariants() {
@@ -76,7 +76,7 @@ async function cleanupPngDir() {
     
     console.log('✓ Cleaned up temporary PNG files (kept 256x256.png for Linux)');
   } catch (e) {
-    console.warn('Warning: Could not clean up PNG directory:', e.message);
+    console.warn('Warning: Could not clean up PNG directory:', e instanceof Error ? e.message : e);
   }
 }
 

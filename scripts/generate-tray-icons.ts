@@ -42,7 +42,7 @@ const translatingIconSvg = `
   </g>
 </svg>`;
 
-async function generateIcon(svg, filename) {
+async function generateIcon(svg: string, filename: string): Promise<void> {
   const resvg = new Resvg(svg, {
     fitTo: {
       mode: 'width',
