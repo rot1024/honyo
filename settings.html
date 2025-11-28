@@ -187,9 +187,7 @@
     <div class="tabs">
       <div class="tab-group">
         <button class="tab active" onclick="switchTab('api-keys')">API Keys</button>
-        <button class="tab" onclick="switchTab('custom-prompt')">Custom Prompt</button>
-        <button class="tab" onclick="switchTab('custom-model')">Custom Model</button>
-        <button class="tab" onclick="switchTab('custom-languages')">Custom Languages</button>
+        <button class="tab" onclick="switchTab('customization')">Customization</button>
         <button class="tab" onclick="switchTab('general')">General</button>
       </div>
       <button class="save-btn tab-save-btn" id="save-all-btn" onclick="saveAll()">Save</button>
@@ -201,7 +199,7 @@
           <h2>API Key Settings</h2>
 
           <div class="form-group">
-            <label for="anthropic-key">Anthropic API Key</label>
+            <label for="anthropic-key">Claude API Key</label>
             <input type="password" id="anthropic-key" placeholder="sk-ant-api03-..." />
             <div class="help-text">
               Get your API key from
@@ -233,10 +231,13 @@
         </div>
       </div>
 
-      <div id="custom-prompt" class="tab-panel">
+      <div id="customization" class="tab-panel">
         <div class="container">
-          <h2>Custom Prompt</h2>
+          <h2>Customization</h2>
 
+          <h3 style="margin-top: 0; margin-bottom: 15px; color: #444; font-size: 16px">
+            Custom Prompt
+          </h3>
           <div class="form-group">
             <label for="custom-prompt-input">Additional Instructions for Translation</label>
             <textarea
@@ -252,14 +253,11 @@ For example:
             </div>
           </div>
 
-          <div class="status" id="prompt-status"></div>
-        </div>
-      </div>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0" />
 
-      <div id="custom-model" class="tab-panel">
-        <div class="container">
-          <h2>Custom Model</h2>
-
+          <h3 style="margin-top: 0; margin-bottom: 15px; color: #444; font-size: 16px">
+            Custom Model
+          </h3>
           <div class="form-group">
             <label for="custom-model-name">Model Name</label>
             <input
@@ -274,21 +272,18 @@ For example:
             <label for="custom-model-provider">Provider</label>
             <select id="custom-model-provider">
               <option value="">Select a provider</option>
-              <option value="anthropic">Anthropic</option>
+              <option value="anthropic">Claude</option>
               <option value="openai">OpenAI</option>
               <option value="google">Google AI</option>
             </select>
             <div class="help-text">Select which API provider to use for this model</div>
           </div>
 
-          <div class="status" id="custom-model-status"></div>
-        </div>
-      </div>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 25px 0" />
 
-      <div id="custom-languages" class="tab-panel">
-        <div class="container">
-          <h2>Custom Languages</h2>
-
+          <h3 style="margin-top: 0; margin-bottom: 15px; color: #444; font-size: 16px">
+            Custom Languages
+          </h3>
           <div class="form-group">
             <label for="custom-languages-input">Custom Language Names</label>
             <textarea
@@ -306,7 +301,7 @@ Ancient Greek"
             </div>
           </div>
 
-          <div class="status" id="custom-languages-status"></div>
+          <div class="status" id="customization-status"></div>
         </div>
       </div>
 
