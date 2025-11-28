@@ -5,11 +5,36 @@ export interface AIModelInfo {
 }
 
 export const AI_MODELS: Record<string, AIModelInfo> = {
-  // Anthropic Claude models (latest first)
+  // Anthropic Claude models (latest first, Sonnet as default for cost efficiency)
   'claude-4.5-sonnet': {
     provider: 'anthropic',
     name: 'Claude 4.5 Sonnet',
     model: 'claude-sonnet-4-5-20250929',
+  },
+  'claude-4.5-opus': {
+    provider: 'anthropic',
+    name: 'Claude 4.5 Opus',
+    model: 'claude-opus-4-5-20251101',
+  },
+  'claude-4.5-haiku': {
+    provider: 'anthropic',
+    name: 'Claude 4.5 Haiku',
+    model: 'claude-haiku-4-5-20251001',
+  },
+  'claude-4.1-opus': {
+    provider: 'anthropic',
+    name: 'Claude 4.1 Opus',
+    model: 'claude-opus-4-1-20250805',
+  },
+  'claude-4-sonnet': {
+    provider: 'anthropic',
+    name: 'Claude 4 Sonnet',
+    model: 'claude-sonnet-4-20250514',
+  },
+  'claude-4-opus': {
+    provider: 'anthropic',
+    name: 'Claude 4 Opus',
+    model: 'claude-opus-4-20250514',
   },
   'claude-3.7-sonnet': {
     provider: 'anthropic',
@@ -20,16 +45,6 @@ export const AI_MODELS: Record<string, AIModelInfo> = {
     provider: 'anthropic',
     name: 'Claude 3.5 Haiku',
     model: 'claude-3-5-haiku-20241022',
-  },
-  'claude-3.5-sonnet': {
-    provider: 'anthropic',
-    name: 'Claude 3.5 Sonnet (Oct)',
-    model: 'claude-3-5-sonnet-20241022',
-  },
-  'claude-3.5-sonnet-v2': {
-    provider: 'anthropic',
-    name: 'Claude 3.5 Sonnet (June)',
-    model: 'claude-3-5-sonnet-20240620',
   },
   // OpenAI GPT models (latest first)
   'gpt-5': {
@@ -72,10 +87,25 @@ export const AI_MODELS: Record<string, AIModelInfo> = {
     name: 'GPT-4o Mini',
     model: 'gpt-4o-mini',
   },
-  'gpt-4': {
+  o3: {
     provider: 'openai',
-    name: 'GPT-4',
-    model: 'gpt-4',
+    name: 'o3',
+    model: 'o3',
+  },
+  'o3-pro': {
+    provider: 'openai',
+    name: 'o3 Pro',
+    model: 'o3-pro',
+  },
+  'o3-mini': {
+    provider: 'openai',
+    name: 'o3 Mini',
+    model: 'o3-mini',
+  },
+  'o4-mini': {
+    provider: 'openai',
+    name: 'o4 Mini',
+    model: 'o4-mini',
   },
   o1: {
     provider: 'openai',
@@ -87,12 +117,12 @@ export const AI_MODELS: Record<string, AIModelInfo> = {
     name: 'o1 Mini',
     model: 'o1-mini',
   },
-  'o1-preview': {
-    provider: 'openai',
-    name: 'o1 Preview',
-    model: 'o1-preview',
-  },
   // Google Gemini models (latest first)
+  'gemini-3.0-pro': {
+    provider: 'google',
+    name: 'Gemini 3.0 Pro (Preview)',
+    model: 'gemini-3-pro-preview',
+  },
   'gemini-2.5-pro': {
     provider: 'google',
     name: 'Gemini 2.5 Pro',
@@ -108,10 +138,10 @@ export const AI_MODELS: Record<string, AIModelInfo> = {
     name: 'Gemini 2.5 Flash-Lite',
     model: 'gemini-2.5-flash-lite',
   },
-  'gemini-2.0-flash-exp': {
+  'gemini-2.0-flash': {
     provider: 'google',
-    name: 'Gemini 2.0 Flash (Experimental)',
-    model: 'gemini-2.0-flash-exp',
+    name: 'Gemini 2.0 Flash',
+    model: 'gemini-2.0-flash',
   },
   'gemini-1.5-flash': {
     provider: 'google',
