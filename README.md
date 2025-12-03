@@ -215,6 +215,78 @@ OPENAI_API_KEY=your_key_here
 GOOGLE_API_KEY=your_key_here
 ```
 
+## Development
+
+### Prerequisites
+
+- Node.js >= 23.6.0
+- npm
+
+### Setup
+
+```bash
+git clone https://github.com/rot1024/honyo.git
+cd honyo
+npm install
+```
+
+### Running in Development
+
+```bash
+npm start
+```
+
+### Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm start` | Run the app in development mode |
+| `npm test` | Run tests with Vitest |
+| `npm run test:ui` | Run tests with Vitest UI |
+| `npm run typecheck` | Type check with TypeScript |
+| `npm run lint` | Lint with ESLint |
+| `npm run lint:fix` | Fix lint errors |
+| `npm run format` | Format with Prettier |
+| `npm run dist` | Build and package for current platform |
+| `npm run dist:mac` | Build and package for macOS |
+| `npm run dist:win` | Build and package for Windows |
+| `npm run dist:linux` | Build and package for Linux |
+
+### Project Structure
+
+```
+src/
+├── main.ts              # Entry point
+├── models.ts            # AI model definitions
+├── app/                 # App lifecycle, updater, accessibility
+├── config/              # Configuration management
+├── keyboard/            # Keyboard event handling (uiohook-napi)
+├── language/            # Language detection and constants
+├── translation/         # AI translation (Vercel AI SDK)
+└── ui/                  # Tray, menu, popup, settings windows
+```
+
+### Tech Stack
+
+- **Electron** - Desktop app framework
+- **TypeScript** - Language
+- **Vercel AI SDK** - AI provider integration (Anthropic, OpenAI, Google)
+- **uiohook-napi** - Global keyboard hooks
+- **electron-builder** - Packaging
+- **Vitest** - Testing
+- **ESLint + Prettier** - Linting and formatting
+
+### Release
+
+```bash
+npm run release          # Auto version bump based on commits
+npm run release:patch    # Patch release (0.0.x)
+npm run release:minor    # Minor release (0.x.0)
+npm run release:major    # Major release (x.0.0)
+```
+
+This updates version, generates CHANGELOG.md, and creates a git tag. Push the tag to trigger the GitHub Actions release workflow.
+
 ## License
 
 MIT
