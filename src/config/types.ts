@@ -23,6 +23,7 @@ export interface Config {
   customLanguages?: string[];
   skippedUpdateVersion?: string;
   enableStreaming?: boolean;
+  openAtLogin?: boolean;
 }
 
 export interface SavedConfig extends Config {
