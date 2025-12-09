@@ -190,7 +190,7 @@
         <button class="tab" onclick="switchTab('custom-prompt')">Custom Prompt</button>
         <button class="tab" onclick="switchTab('custom-model')">Custom Model</button>
         <button class="tab" onclick="switchTab('custom-languages')">Custom Languages</button>
-        <button class="tab" onclick="switchTab('display')">Display</button>
+        <button class="tab" onclick="switchTab('general')">General</button>
       </div>
       <button class="save-btn tab-save-btn" id="save-all-btn" onclick="saveAll()">Save</button>
     </div>
@@ -310,9 +310,9 @@ Ancient Greek"
         </div>
       </div>
 
-      <div id="display" class="tab-panel">
+      <div id="general" class="tab-panel">
         <div class="container">
-          <h2>Display Settings</h2>
+          <h2>General Settings</h2>
 
           <div class="checkbox-group">
             <input type="checkbox" id="auto-close-on-blur" />
@@ -336,7 +336,15 @@ Ancient Greek"
             mode only).
           </div>
 
-          <div class="status" id="display-status"></div>
+          <div class="checkbox-group" style="margin-top: 20px">
+            <input type="checkbox" id="open-at-login" />
+            <label for="open-at-login" class="checkbox-label"> Launch Honyo at login </label>
+          </div>
+          <div class="help-text" style="margin-top: -15px; margin-left: 28px">
+            When enabled, Honyo will automatically start when you log in to your computer.
+          </div>
+
+          <div class="status" id="general-status"></div>
         </div>
       </div>
     </div>
@@ -368,6 +376,7 @@ Ancient Greek"
         ipcRenderer.send('load-custom-model');
         ipcRenderer.send('load-custom-languages');
         ipcRenderer.send('load-auto-close-on-blur');
+        ipcRenderer.send('load-open-at-login');
 
         // Add change listeners
         document
@@ -397,6 +406,9 @@ Ancient Greek"
         document
           .getElementById('enable-streaming')
           .addEventListener('change', () => (pendingChanges.display = true));
+        document
+          .getElementById('open-at-login')
+          .addEventListener('change', () => saveOpenAtLogin());
       });
 
       // API Keys functionality
@@ -501,6 +513,23 @@ Ancient Greek"
 
       ipcRenderer.on('enable-streaming-loaded', (event, enableStreaming) => {
         document.getElementById('enable-streaming').checked = enableStreaming;
+      });
+
+      ipcRenderer.on('open-at-login-loaded', (event, openAtLogin) => {
+        document.getElementById('open-at-login').checked = openAtLogin;
+      });
+
+      function saveOpenAtLogin() {
+        const openAtLogin = document.getElementById('open-at-login').checked;
+        ipcRenderer.send('save-open-at-login', openAtLogin);
+      }
+
+      ipcRenderer.on('open-at-login-saved', (event, success) => {
+        if (success) {
+          showStatus('Launch at login setting saved!', false);
+        } else {
+          showStatus('Failed to save launch at login setting.', true);
+        }
       });
 
       function saveDisplaySettings() {

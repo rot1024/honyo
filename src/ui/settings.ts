@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain, app } from 'electron';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import {
@@ -113,4 +113,15 @@ export function setupSettingsIPC(): void {
       event.reply('display-settings-saved', true);
     },
   );
+
+  ipcMain.on('load-open-at-login', event => {
+    const loginSettings = app.getLoginItemSettings();
+    event.reply('open-at-login-loaded', loginSettings.openAtLogin);
+  });
+
+  ipcMain.on('save-open-at-login', (event, openAtLogin: boolean) => {
+    app.setLoginItemSettings({ openAtLogin });
+    updateConfig({ openAtLogin });
+    event.reply('open-at-login-saved', true);
+  });
 }
